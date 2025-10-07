@@ -77,6 +77,7 @@
   import { workqueuesAPI } from "@/services/automationserver";
   import WorkItemRow from "./WorkItemRow.vue";
   import DropdownButton from "./DropdownButton.vue";
+  import { useWorkitemsStore } from "@/stores/workitemsStore";
 
   
   export default {
@@ -100,13 +101,33 @@
     data() {
       return {
         workitems: [],
-        page: 1,
         totalPages: 1,
-        searchTerm: "",
         searchTimeout: null,
         refreshInterval: null,
         dropdownOpen: false   
       };
+    },
+    setup() {
+      const workitemsStore = useWorkitemsStore();
+      return { workitemsStore };
+    },
+    computed: {
+      searchTerm: {
+        get() {
+          return this.workitemsStore.getWorkqueueState(this.workqueueId).searchTerm;
+        },
+        set(value) {
+          this.workitemsStore.setSearchTerm(this.workqueueId, value);
+        }
+      },
+      page: {
+        get() {
+          return this.workitemsStore.getWorkqueueState(this.workqueueId).page;
+        },
+        set(value) {
+          this.workitemsStore.setPage(this.workqueueId, value);
+        }
+      }
     },
     async created() {
       await this.fetchWorkItems();
@@ -115,7 +136,7 @@
       searchTerm() {
         clearTimeout(this.searchTimeout);
         this.searchTimeout = setTimeout(async () => {
-          this.page = 1; // Reset to first page when search term changes
+          // The store already resets page to 1 when search term changes
           await this.fetchWorkItems();
         }, 300); // 300ms delay
       }
@@ -136,7 +157,7 @@
   
         this.workitems = response.items;
         this.totalPages = response.total_pages;
-        if (this.page > this.totalPages) {
+        if (this.page > this.totalPages && this.totalPages > 0) {
           this.page = this.totalPages;
           this.fetchWorkItems();
         }
