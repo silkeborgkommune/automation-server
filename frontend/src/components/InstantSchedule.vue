@@ -53,17 +53,7 @@ export default {
     methods: {
         async trigger() {
             try {
-                // Basic validation for parameters if provided
-                if (this.parameters && this.parameters.trim()) {
-                    try {
-                        JSON.parse(this.parameters)
-                    } catch (e) {
-                        // If it's not valid JSON, we'll still allow it as plain text parameters
-                        // This maintains flexibility for simple command-line arguments
-                    }
-                }
-
-                await sessionsAPI.createSession(this.selected, this.parameters || null)
+                await sessionsAPI.createSession(this.selected, this.parameters)
                 this.selected = ""
                 this.parameters = ""
 
