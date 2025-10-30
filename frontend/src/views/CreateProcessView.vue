@@ -35,7 +35,7 @@ export default {
   methods: {
     async saveProcess(process) {
       try {
-        await processesAPI.createProcess(process)
+        process = await processesAPI.createProcess(process)
 
         alertStore.addAlert({
           type: 'success',
@@ -45,8 +45,8 @@ export default {
         console.log(error)
         alertStore.addAlert({ type: 'error', message: error })
       }
-      // Redirect to the overview
-      this.$router.push({ name: 'process' })
+      // Redirect to the edit form
+      this.$router.push({ name: 'process.edit', params: { id: process.id } })
     }
   }
 }

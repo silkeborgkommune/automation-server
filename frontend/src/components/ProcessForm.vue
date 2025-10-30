@@ -53,9 +53,9 @@
           required
         >
           <option value="python">Python</option>
-          <option value="blue_prism">Blue Prism</option>
+          <!--<option value="blue_prism">Blue Prism</option>
           <option value="ui_path">UI Path</option>
-          <option value="power_automate_desktop">Power Automate Desktop</option>
+          <option value="power_automate_desktop">Power Automate Desktop</option>-->
         </select>
       </div>
     </div>
