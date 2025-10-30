@@ -135,7 +135,11 @@ export default {
   },
   async mounted() {
     this.workqueues = await workqueuesAPI.getWorkqueues()
+    this.workqueues.sort((a, b) => a.name.localeCompare(b.name))
+
     this.credentials = await credentialsAPI.getCredentials()
+    this.credentials.sort((a, b) => a.name.localeCompare(b.name))
+
   },
 
   methods: {

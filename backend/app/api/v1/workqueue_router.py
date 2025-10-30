@@ -67,7 +67,10 @@ def get_workqueues(
     uow: AbstractUnitOfWork = Depends(get_unit_of_work),
     token: AccessToken = Depends(resolve_access_token),
 ) -> list[Workqueue]:
-    return uow.workqueues.get_all(include_deleted)
+    workqueues = uow.workqueues.get_all(include_deleted)
+    sorted_workqueues = sorted(workqueues, key=lambda wq: wq.name)
+
+    return sorted_workqueues
 
 
 @router.get("/information")
