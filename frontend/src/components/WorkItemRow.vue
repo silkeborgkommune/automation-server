@@ -1,14 +1,14 @@
 <template>
   <tr :class="{
-    'hover:bg-base-200': true,
+    'hover:bg-base-200 cursor-pointer': true,
     'bg-error/30': workitem.status === 'failed',
     'bg-warning/30': workitem.status === 'pending user action'
   }">
-    <td class="text-center">{{ workitem.id }}</td>
-    <td>{{ workitem.reference }}</td>
-    <td>{{ workitem.message }}</td>
+    <td @click="goToDetails" class="text-center">{{ workitem.id }}</td>
+    <td @click="goToDetails">{{ workitem.reference }}</td>
+    <td @click="goToDetails">{{ workitem.message }}</td>
     <td><json-view :jsonData="workitem.data" /></td>
-    <td class="text-center">
+    <td @click="goToDetails" class="text-center">
       <font-awesome-icon v-if="workitem.status === 'new'" :icon="['fas', 'circle']" class="text-info" :title="workitem.status" />
       <font-awesome-icon v-else-if="workitem.status === 'in progress'" :icon="['fas', 'spinner']" spin class="text-warning" :title="workitem.status" />
       <font-awesome-icon v-else-if="workitem.status === 'completed'" :icon="['fas', 'circle-check']" class="text-success" :title="workitem.status" />
@@ -16,8 +16,8 @@
       <font-awesome-icon v-else-if="workitem.status === 'pending user action'" :icon="['fas', 'lock']" class="text-warning" :title="workitem.status" />
       <font-awesome-icon v-if="workitem.locked" :icon="['fas', 'lock']" class="text-base-content/40 ml-1" title="Locked" />
     </td>
-    <td class="text-center">{{ $formatDateTime(workitem.created_at) }}</td>
-    <td class="text-center">{{ $formatDateTime(workitem.updated_at) }}</td>
+    <td @click="goToDetails" class="text-center">{{ $formatDateTime(workitem.created_at) }}</td>
+    <td @click="goToDetails" class="text-center">{{ $formatDateTime(workitem.updated_at) }}</td>
     <td class="text-center">
       <dropdown-button :label="'Actions'" :items="[
         { text: 'Retry', icon: 'fas fa-redo', action: 'retry' },
@@ -50,6 +50,9 @@ export default {
     }
   },
   methods: {
+    goToDetails() {
+      this.$router.push({ name: 'workqueue.item', params: { id: this.workitem.workqueue_id, itemId: this.workitem.id } });
+    },
     triggerAction(action) {
       let status = '';
       if (action === 'retry') status = 'new';
