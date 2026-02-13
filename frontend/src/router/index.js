@@ -52,8 +52,24 @@ const routes = [
   },
   {
     path: '/credentials',
-    name: 'Credentials',
-    component: () => import('../views/CredentialsView.vue')
+    name: 'credentials.container',
+    children: [
+      {
+        path: '',
+        name: 'credentials',
+        component: () => import('../views/CredentialsView.vue')
+      },
+      {
+        path: ':id/edit',
+        name: 'credential.edit',
+        component: () => import('../views/EditCredentialView.vue')
+      },
+      {
+        path: 'create',
+        name: 'credential.create',
+        component: () => import('../views/CreateCredentialView.vue')
+      }
+    ]
   },
   {
     path: '/administration',
