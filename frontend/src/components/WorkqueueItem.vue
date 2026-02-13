@@ -2,7 +2,8 @@
   <tr class="hover:bg-base-300 cursor-pointer">
     <td @click="edit()">{{ workqueue.name }}</td>
     <td @click="edit()" class="text-center">
-      <font-awesome-icon :icon="['fas', 'check']" v-if="workqueue.enabled" />
+      <font-awesome-icon :icon="['fas', 'circle-check']" v-if="workqueue.enabled" class="text-success" />
+      <font-awesome-icon :icon="['fas', 'xmark-circle']" v-else class="text-base-content/40" />
     </td>
     <td @click="edit()" class="text-center">{{ workqueue.in_progress }}</td>
     <td @click="edit()" class="text-center">{{ workqueue.new }}</td>
