@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed top-5 right-5 w-80 z-50 space-y-2">
+    <div class="fixed bottom-5 right-5 w-80 z-50 space-y-2">
       <transition-group name="slide-fade">
         <div
           v-for="(alert, index) in alerts"
@@ -56,7 +56,7 @@
   }
   .slide-fade-enter-from,
   .slide-fade-leave-to {
-    transform: translateY(-10px);
+    transform: translateY(10px);
     opacity: 0;
   }
   </style>
