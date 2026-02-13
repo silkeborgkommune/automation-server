@@ -53,6 +53,9 @@ export default {
     },
 
     async deleteProcess() {
+      const confirmed = confirm(`Are you sure you want to delete '${this.process.name}'?`)
+      if (!confirmed) return
+
       try {
         await processesAPI.deleteProcess(this.process.id)
 

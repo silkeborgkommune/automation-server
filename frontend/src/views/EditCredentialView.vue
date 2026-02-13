@@ -41,6 +41,9 @@ export default {
     },
 
     async deleteCredential() {
+      const confirmed = confirm(`Are you sure you want to delete '${this.credential.name}'?`)
+      if (!confirmed) return
+
       try {
         await credentialsAPI.deleteCredential(this.credential.id)
 
