@@ -110,7 +110,7 @@
     <!-- Action Buttons -->
     <div class="text-right space-x-2">
       <button type="submit" class="btn btn-primary">Save</button>
-      <router-link :to="{ name: 'process' }" class="btn">Cancel</router-link>
+      <router-link :to="{ name: 'process' }" class="btn btn-secondary">Cancel</router-link>
       <button type="button" class="btn btn-error" @click="deleteProcess" v-if="this.process.id">Delete</button>
     </div>
   </form>

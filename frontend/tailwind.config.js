@@ -5,12 +5,22 @@ export default {
   plugins: [daisyui],
 
     daisyui: {
-        styled: true,
-        themes: true,
-        base: true,
-        utils: true,
-        logs: true,
-        rtl: false,
+        themes: [
+            {
+                automation: {
+                    "primary": "#4e937a",
+                    "secondary": "#cbd5e1",
+                    "accent": "#f7b32b",
+                    "neutral": "#273043",
+                    "neutral-content": "#ffffff",
+                    "base-100": "#ffffff",
+                    "base-200": "#f1f5f9",
+                    "base-300": "#cbd5e1",
+                    "base-content": "#1f2937",
+                    "error": "#b4656f",
+                },
+            },
+        ],
     },
 
 };

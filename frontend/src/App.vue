@@ -5,7 +5,7 @@
     <!-- Sidebar -->
     <aside
       :class="[
-        'fixed lg:static top-0 left-0 h-full lg:h-auto z-50 bg-gray-800 text-white w-64 min-h-screen p-4 transition-transform transform',
+        'fixed lg:static top-0 left-0 h-full lg:h-auto z-50 bg-neutral text-neutral-content w-64 min-h-screen p-4 transition-transform transform',
         { 'translate-x-0': isSidebarOpen, '-translate-x-full': !isSidebarOpen, 'lg:translate-x-0': true }
       ]"
       id="sidebar">
@@ -14,15 +14,15 @@
       </div>
       <hr />
       <nav class="mt-6">
-        <router-link class="block py-2.5 px-4 rounded hover:bg-gray-700" to="/" active-class="nav-link-active"
+        <router-link class="block py-2.5 px-4 rounded hover:brightness-125 hover:bg-neutral" to="/" active-class="nav-link-active"
           exact-active-class="nav-link-active">Home</router-link>
-        <router-link class="block py-2.5 px-4 rounded hover:bg-gray-700" to="/process"
+        <router-link class="block py-2.5 px-4 rounded hover:brightness-125 hover:bg-neutral" to="/process"
           active-class="nav-link-active">Processes</router-link>
-        <router-link class="block py-2.5 px-4 rounded hover:bg-gray-700" to="/workqueues"
+        <router-link class="block py-2.5 px-4 rounded hover:brightness-125 hover:bg-neutral" to="/workqueues"
           active-class="nav-link-active">Workqueues</router-link>
-        <router-link class="block py-2.5 px-4 rounded hover:bg-gray-700" to="/credentials"
+        <router-link class="block py-2.5 px-4 rounded hover:brightness-125 hover:bg-neutral" to="/credentials"
           active-class="nav-link-active">Credentials</router-link>
-        <router-link class="block py-2.5 px-4 rounded hover:bg-gray-700" to="/administration"
+        <router-link class="block py-2.5 px-4 rounded hover:brightness-125 hover:bg-neutral" to="/administration"
           active-class="nav-link-active">Administration</router-link>
       </nav>
     </aside>
@@ -37,7 +37,7 @@
     <div class="flex-1 flex flex-col">
 
       <!-- Mobile top bar -->
-      <header class="lg:hidden bg-gray-800 text-white p-3 flex items-center gap-3 sticky top-0 z-40">
+      <header class="lg:hidden bg-neutral text-neutral-content p-3 flex items-center gap-3 sticky top-0 z-40">
         <button @click="toggleSidebar" class="btn btn-ghost btn-sm btn-square">
           <font-awesome-icon :icon="['fas', 'bars']" class="text-lg" />
         </button>
@@ -81,6 +81,6 @@ export default {
 
 <style>
   .nav-link-active {
-    background-color: #374151; /* Tailwind gray-700 */
+    background-color: #3a4a5e; /* Midnight violet lighter */
   }
 </style>
