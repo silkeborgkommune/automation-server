@@ -120,6 +120,11 @@ Scheduler tests are located in `backend/tests/scheduler/` with comprehensive cov
 - Database URL: Set via `DATABASE_URL` environment variable
 - Frontend API base URL: Set via `VITE_ATS_API_BASE_URL`
 
+## Frontend Notes
+
+- Icons use `@fortawesome/vue-fontawesome` with explicit registration — **not** CSS webfonts. New icons must be imported and added to `library.add()` in `frontend/src/fontAwesome.js`, then used as `<font-awesome-icon :icon="['fas', 'icon-name']" />`. Do not use `<i class="fa fa-...">`.
+- Vue components use Options API (not Composition API)
+
 ## Code Conventions
 
 Follow the guidelines in `CONVENTIONS.md`:
