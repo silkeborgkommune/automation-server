@@ -34,7 +34,6 @@
         <thead>
           <tr>
             <th class="text-center">Id</th>
-            <th>&nbsp;</th>
             <th>Reference</th>
             <th>Message</th>
             <th>Data</th>
@@ -58,7 +57,7 @@
         <!-- No Workitems Found Message -->
         <tbody v-else>
           <tr>
-            <td colspan="8" class="text-center text-base-content/60">No workitems found</td>
+            <td colspan="7" class="text-center text-base-content/60">No workitems found</td>
           </tr>
         </tbody>
       </table>

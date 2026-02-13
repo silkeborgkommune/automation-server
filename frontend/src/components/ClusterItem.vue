@@ -6,8 +6,9 @@
         :class="{
           'text-base-content/40': status === '',
           'text-info': status === 'new',
-          'text-success': status === 'in progress'
+          'text-success': status === 'in progress',
         }"
+        :title="status || 'idle'"
       />
       <span>{{ resource.name }}</span>
     </td>

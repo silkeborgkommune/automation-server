@@ -5,14 +5,17 @@
     'bg-warning/30': workitem.status === 'pending user action'
   }">
     <td class="text-center">{{ workitem.id }}</td>
-    <td class="text-center">
-      <font-awesome-icon :icon="['fas', 'triangle-exclamation']" v-if="workitem.status === 'failed'" />
-      <font-awesome-icon :icon="['fas', 'lock']" v-if="workitem.locked" />
-    </td>
     <td>{{ workitem.reference }}</td>
     <td>{{ workitem.message }}</td>
     <td><json-view :jsonData="workitem.data" /></td>
-    <td class="text-center">{{ workitem.status }}</td>
+    <td class="text-center">
+      <font-awesome-icon v-if="workitem.status === 'new'" :icon="['fas', 'circle']" class="text-info" :title="workitem.status" />
+      <font-awesome-icon v-else-if="workitem.status === 'in progress'" :icon="['fas', 'spinner']" spin class="text-warning" :title="workitem.status" />
+      <font-awesome-icon v-else-if="workitem.status === 'completed'" :icon="['fas', 'circle-check']" class="text-success" :title="workitem.status" />
+      <font-awesome-icon v-else-if="workitem.status === 'failed'" :icon="['fas', 'triangle-exclamation']" class="text-error" :title="workitem.status" />
+      <font-awesome-icon v-else-if="workitem.status === 'pending user action'" :icon="['fas', 'lock']" class="text-warning" :title="workitem.status" />
+      <font-awesome-icon v-if="workitem.locked" :icon="['fas', 'lock']" class="text-base-content/40 ml-1" title="Locked" />
+    </td>
     <td class="text-center">{{ $formatDateTime(workitem.created_at) }}</td>
     <td class="text-center">{{ $formatDateTime(workitem.updated_at) }}</td>
     <td class="text-center">
