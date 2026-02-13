@@ -1,13 +1,12 @@
 <template>
-  <div class="card bg-base-100 shadow-xl card-bordered card-compact">
-    <div class="card-body">
-      <!-- Flex container for title and actions on the same row -->
-      <div class="flex items-center justify-between">
-        <h2 class="card-title">{{ title }}</h2>
-        <div class="card-actions">
-          <slot name="header-right"></slot>
-        </div>
+  <div class="card bg-base-100 shadow-xl card-compact overflow-hidden border border-slate-300">
+    <div class="bg-slate-300 flex items-center justify-between px-4 py-2">
+      <h2 class="card-title">{{ title }}</h2>
+      <div class="card-actions">
+        <slot name="header-right"></slot>
       </div>
+    </div>
+    <div class="card-body">
       <slot></slot>
     </div>
   </div>
