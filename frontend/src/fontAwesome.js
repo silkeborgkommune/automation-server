@@ -31,7 +31,9 @@ import {
   faLock,
   faPlay,
   faSun,
-  faMoon
+  faMoon,
+  faSpinner,
+  faCircleCheck
 } from '@fortawesome/free-solid-svg-icons'
 
 // Add icons to the library
@@ -59,7 +61,9 @@ library.add(
   faLock,
   faPlay,
   faSun,
-  faMoon
+  faMoon,
+  faSpinner,
+  faCircleCheck
 )
 
 // Export the FontAwesomeIcon component
