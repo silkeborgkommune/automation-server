@@ -1,17 +1,16 @@
 <template>
   <!-- Main Wrapper -->
-  <div class="flex h-screen">
+  <div class="flex h-screen overflow-x-hidden">
 
     <!-- Sidebar -->
     <aside
       :class="[
-        'bg-gray-800 text-white w-64 min-h-screen p-4 transition-transform transform',
-        { 'translate-x-0': isSidebarOpen, '-translate-x-full': !isSidebarOpen, 'lg:translate-x-0 lg:static': true }
+        'fixed lg:static top-0 left-0 h-full lg:h-auto z-50 bg-gray-800 text-white w-64 min-h-screen p-4 transition-transform transform',
+        { 'translate-x-0': isSidebarOpen, '-translate-x-full': !isSidebarOpen, 'lg:translate-x-0': true }
       ]"
       id="sidebar">
       <div class="flex items-center justify-between">
         <h1 class="text-2xl font-semibold">Automation Server</h1>
-        <button class="lg:hidden" @click="toggleSidebar">☰</button>
       </div>
       <hr />
       <nav class="mt-6">
@@ -28,21 +27,23 @@
       </nav>
     </aside>
 
+    <!-- Backdrop overlay for mobile sidebar -->
+    <div v-if="isSidebarOpen"
+         class="fixed inset-0 bg-black/40 z-40 lg:hidden"
+         @click="toggleSidebar">
+    </div>
+
     <!-- Main Content -->
     <div class="flex-1 flex flex-col">
 
-      <!-- Top Navigation -->
-       <!--
-      <header class="bg-white shadow p-4 flex items-center justify-between">
-        <button class="lg:hidden text-gray-700" @click="toggleSidebar">☰</button>
-        <h2 class="text-xl font-semibold">Dashboard</h2>
-        <div class="flex space-x-4 items-center">
-          <button class="btn btn-ghost btn-circle"><i class="fa fa-bell"></i></button>
-          <button class="btn btn-ghost btn-circle"><i class="fa fa-envelope"></i></button>
-          <button class="btn btn-ghost btn-circle"><i class="fa fa-cog"></i></button>
-        </div>
+      <!-- Mobile top bar -->
+      <header class="lg:hidden bg-gray-800 text-white p-3 flex items-center gap-3 sticky top-0 z-40">
+        <button @click="toggleSidebar" class="btn btn-ghost btn-sm btn-square">
+          <font-awesome-icon :icon="['fas', 'bars']" class="text-lg" />
+        </button>
+        <span class="font-semibold">Automation Server</span>
       </header>
--->
+
       <!-- Main Content Area -->
       <main class="p-6 overflow-auto pb-20">
         <!-- Router View and Alert Flasher -->
@@ -65,6 +66,11 @@ export default {
       isSidebarOpen: false,
     };
   },
+  watch: {
+    $route() {
+      this.isSidebarOpen = false;
+    }
+  },
   methods: {
     toggleSidebar() {
       this.isSidebarOpen = !this.isSidebarOpen;
@@ -75,6 +81,6 @@ export default {
 
 <style>
   .nav-link-active {
-    background-color: #374151; /* Tailwind gray-700 */    
+    background-color: #374151; /* Tailwind gray-700 */
   }
 </style>

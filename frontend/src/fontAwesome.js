@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 // Import specific icons
 import {
+  faBars,
   faBell,
   faEnvelope,
   faCog,
@@ -33,6 +34,7 @@ import {
 
 // Add icons to the library
 library.add(
+  faBars,
   faBell,
   faEnvelope,
   faCog,
