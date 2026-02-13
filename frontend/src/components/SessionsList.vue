@@ -31,7 +31,7 @@
                 </thead>
                 <tbody>
 					<tr v-for="session in sessions" :key="session.id" 
-						:class="['cursor-pointer', 'hover:bg-base-300', { 'bg-red-400': session.status === 'failed' }]">
+						:class="['cursor-pointer', 'hover:bg-base-300', { 'bg-error/30': session.status === 'failed' }]">
 						<td @click="edit(session.id)" class="text-center">{{ session.id }}</td>
 						<td @click="edit(session.id)" class="text-center">
 							<span v-if="session.status === 'failed'">

@@ -4,9 +4,9 @@
       <font-awesome-icon
         :icon="['fas', 'circle']"
         :class="{
-          'text-gray-400': status === '',         // Equivalent to 'text-secondary'
-          'text-blue-500': status === 'new',      // Equivalent to 'text-info'
-          'text-green-500': status === 'in progress' // Equivalent to 'text-success'
+          'text-base-content/40': status === '',
+          'text-info': status === 'new',
+          'text-success': status === 'in progress'
         }"
       />
       <span>{{ resource.name }}</span>

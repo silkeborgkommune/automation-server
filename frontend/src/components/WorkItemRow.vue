@@ -1,8 +1,8 @@
 <template>
   <tr :class="{
     'hover:bg-base-200': true,
-    'bg-red-400': workitem.status === 'failed',
-    'bg-yellow-300': workitem.status === 'pending user action'
+    'bg-error/30': workitem.status === 'failed',
+    'bg-warning/30': workitem.status === 'pending user action'
   }">
     <td class="text-center">{{ workitem.id }}</td>
     <td class="text-center">

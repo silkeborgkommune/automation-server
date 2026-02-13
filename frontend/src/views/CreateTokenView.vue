@@ -10,7 +10,7 @@
           <p class="mb-2">
             Token has been created. Please copy this token value as it will never be shown again:
           </p>
-          <div class="flex items-center space-x-2 bg-gray-100 rounded p-3">
+          <div class="flex items-center space-x-2 bg-base-200 rounded p-3">
             <!-- Token Display with wrapping -->
             <pre class="flex-1 whitespace-pre-wrap break-all">{{ token.access_token }}</pre>
             <button @click="copyToClipboard(token.access_token)" class="btn btn-sm btn-ghost" title="Copy">

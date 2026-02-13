@@ -36,7 +36,7 @@
         </div>
 
         <div v-if="logs.length === 0">
-            <div class="text-center text-gray-500">No logs found</div>
+            <div class="text-center text-base-content/60">No logs found</div>
         </div>
     </content-card>
 </template>

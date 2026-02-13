@@ -12,7 +12,7 @@
     <!-- Cron Input Field -->
     <div v-if="editObject.type === 'cron'">
       <input type="text" class="input input-bordered w-full" id="cron" v-model="editObject.cron" required />
-      <small class="text-gray-500 block mt-1">
+      <small class="text-base-content/60 block mt-1">
         See <a href="https://crontab.guru/" target="_blank" class="link">crontab.guru</a> for help.
       </small>
     </div>
@@ -35,14 +35,14 @@
 
       <!-- Resource Limit Input -->
       <div>
-        <small class="text-gray-500 block mb-1">How many resources can this workqueue consume</small>
+        <small class="text-base-content/60 block mb-1">How many resources can this workqueue consume</small>
         <input type="number" class="input input-bordered w-full" v-model="editObject.workqueue_resource_limit"
           placeholder="Set the resource limit" required />
       </div>
 
       <!-- Scale-up Threshold Input -->
       <div>
-        <small class="text-gray-500 block mb-1">How many workitems must be present to scale up</small>
+        <small class="text-base-content/60 block mb-1">How many workitems must be present to scale up</small>
         <input type="number" class="input input-bordered w-full" v-model="editObject.workqueue_scale_up_threshold"
           placeholder="Set the scaling threshold" required />
       </div>
@@ -50,7 +50,7 @@
 
     <div>
       <input type="text" class="input input-bordered w-full" id="cron" v-model="editObject.parameters" />
-      <small class="text-gray-500 block mt-1">
+      <small class="text-base-content/60 block mt-1">
         Commandline parameters to pass to the process
       </small>
     </div>

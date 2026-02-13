@@ -89,7 +89,7 @@
     </div>
 
     <!-- Unsupported Platform Message -->
-    <div class="text-center text-gray-500" v-if="editedProcess.target_type != 'python'">
+    <div class="text-center text-base-content/60" v-if="editedProcess.target_type != 'python'">
       We are sorry, but this platform is currently not supported.
     </div>
 
@@ -103,7 +103,7 @@
           v-model="editedProcess.requirements"
           id="requirements"
         />
-        <small class="text-gray-500 block mt-1">Space separated list of required features</small>
+        <small class="text-base-content/60 block mt-1">Space separated list of required features</small>
       </div>
     </div>
 

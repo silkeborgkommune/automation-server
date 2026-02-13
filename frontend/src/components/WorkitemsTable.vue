@@ -58,7 +58,7 @@
         <!-- No Workitems Found Message -->
         <tbody v-else>
           <tr>
-            <td colspan="8" class="text-center text-gray-500">No workitems found</td>
+            <td colspan="8" class="text-center text-base-content/60">No workitems found</td>
           </tr>
         </tbody>
       </table>
