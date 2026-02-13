@@ -5,7 +5,7 @@
     <!-- Sidebar -->
     <aside
       :class="[
-        'fixed lg:static top-0 left-0 h-full lg:h-auto z-50 bg-neutral text-neutral-content w-64 min-h-screen p-4 transition-transform transform',
+        'fixed lg:static top-0 left-0 h-full lg:h-auto z-50 bg-neutral text-neutral-content w-64 min-h-screen p-4 transition-transform transform flex flex-col',
         { 'translate-x-0': isSidebarOpen, '-translate-x-full': !isSidebarOpen, 'lg:translate-x-0': true }
       ]"
       id="sidebar">
@@ -14,17 +14,24 @@
       </div>
       <hr />
       <nav class="mt-6">
-        <router-link class="block py-2.5 px-4 rounded hover:brightness-125 hover:bg-neutral" to="/" active-class="nav-link-active"
-          exact-active-class="nav-link-active">Home</router-link>
-        <router-link class="block py-2.5 px-4 rounded hover:brightness-125 hover:bg-neutral" to="/process"
-          active-class="nav-link-active">Processes</router-link>
-        <router-link class="block py-2.5 px-4 rounded hover:brightness-125 hover:bg-neutral" to="/workqueues"
-          active-class="nav-link-active">Workqueues</router-link>
-        <router-link class="block py-2.5 px-4 rounded hover:brightness-125 hover:bg-neutral" to="/credentials"
-          active-class="nav-link-active">Credentials</router-link>
-        <router-link class="block py-2.5 px-4 rounded hover:brightness-125 hover:bg-neutral" to="/administration"
-          active-class="nav-link-active">Administration</router-link>
+        <router-link class="block py-2.5 px-4 rounded hover:bg-white/10" to="/" active-class="bg-white/15"
+          exact-active-class="bg-white/15">Home</router-link>
+        <router-link class="block py-2.5 px-4 rounded hover:bg-white/10" to="/process"
+          active-class="bg-white/15">Processes</router-link>
+        <router-link class="block py-2.5 px-4 rounded hover:bg-white/10" to="/workqueues"
+          active-class="bg-white/15">Workqueues</router-link>
+        <router-link class="block py-2.5 px-4 rounded hover:bg-white/10" to="/credentials"
+          active-class="bg-white/15">Credentials</router-link>
+        <router-link class="block py-2.5 px-4 rounded hover:bg-white/10" to="/administration"
+          active-class="bg-white/15">Administration</router-link>
       </nav>
+      <!-- Dark mode toggle -->
+      <div class="mt-auto pt-6">
+        <button @click="toggleDarkMode" class="btn btn-ghost btn-sm gap-2 w-full justify-start opacity-70 hover:opacity-100">
+          <font-awesome-icon :icon="['fas', isDark ? 'sun' : 'moon']" />
+          {{ isDark ? 'Light mode' : 'Dark mode' }}
+        </button>
+      </div>
     </aside>
 
     <!-- Backdrop overlay for mobile sidebar -->
@@ -64,6 +71,7 @@ export default {
   data() {
     return {
       isSidebarOpen: false,
+      isDark: false,
     };
   },
   watch: {
@@ -75,12 +83,33 @@ export default {
     toggleSidebar() {
       this.isSidebarOpen = !this.isSidebarOpen;
     },
+    toggleDarkMode() {
+      this.isDark = !this.isDark;
+      this.applyTheme();
+      localStorage.setItem('theme-dark', this.isDark ? '1' : '0');
+    },
+    applyTheme() {
+      document.documentElement.setAttribute('data-theme', this.isDark ? 'automation-dark' : 'automation');
+    },
+  },
+  mounted() {
+    const stored = localStorage.getItem('theme-dark');
+    if (stored !== null) {
+      this.isDark = stored === '1';
+    } else {
+      this.isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    this.applyTheme();
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (localStorage.getItem('theme-dark') === null) {
+        this.isDark = e.matches;
+        this.applyTheme();
+      }
+    });
   },
 };
 </script>
 
 <style>
-  .nav-link-active {
-    background-color: #3a4a5e; /* Midnight violet lighter */
-  }
 </style>
