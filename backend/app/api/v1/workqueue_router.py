@@ -81,31 +81,22 @@ def get_workqueues_information(
 ) -> list[WorkqueueInformation]:
     with uow:
         workqueues = uow.workqueues.get_all(include_deleted)
+        all_counts = uow.workqueues.get_all_workitem_counts()
+
         result = []
         for queue in workqueues:
+            counts = all_counts.get(queue.id, {})
             queue_info = WorkqueueInformation(
                 id=queue.id,
                 name=queue.name,
                 description=queue.description,
                 enabled=queue.enabled,
-                new=uow.workqueues.get_workitem_count(
-                    queue.id, enums.WorkItemStatus.NEW
-                ),
-                in_progress=uow.workqueues.get_workitem_count(
-                    queue.id, enums.WorkItemStatus.IN_PROGRESS
-                ),
-                completed=uow.workqueues.get_workitem_count(
-                    queue.id, enums.WorkItemStatus.COMPLETED
-                ),
-                failed=uow.workqueues.get_workitem_count(
-                    queue.id, enums.WorkItemStatus.FAILED
-                ),
-                pending_user_action=uow.workqueues.get_workitem_count(
-                    queue.id, enums.WorkItemStatus.PENDING_USER_ACTION
-                ),
+                new=counts.get(enums.WorkItemStatus.NEW, 0),
+                in_progress=counts.get(enums.WorkItemStatus.IN_PROGRESS, 0),
+                completed=counts.get(enums.WorkItemStatus.COMPLETED, 0),
+                failed=counts.get(enums.WorkItemStatus.FAILED, 0),
+                pending_user_action=counts.get(enums.WorkItemStatus.PENDING_USER_ACTION, 0),
             )
-
-            # Append to result
             result.append(queue_info)
 
         return result

@@ -8,6 +8,39 @@ from . import generate_basic_data  # noqa: F401
 from app.enums import WorkItemStatus
 
 
+def test_get_workqueues_information(session: Session, client: TestClient):
+    generate_basic_data(session)
+
+    response = client.get("/workqueues/information")
+    assert response.status_code == 200
+
+    data = response.json()
+    # Only non-deleted workqueue should appear
+    assert len(data) == 1
+
+    queue = data[0]
+    assert queue["name"] == "Workqueue"
+    assert queue["enabled"] is True
+    assert queue["new"] == 1
+    assert queue["in_progress"] == 1
+    assert queue["completed"] == 1
+    assert queue["failed"] == 1
+    assert queue["pending_user_action"] == 1
+
+    # With include_deleted, both queues should appear
+    response = client.get("/workqueues/information?include_deleted=true")
+    data = response.json()
+    assert len(data) == 2
+
+    # Deleted queue should have zero counts
+    deleted_queue = next(q for q in data if q["name"] == "Deleted workqueue")
+    assert deleted_queue["new"] == 0
+    assert deleted_queue["in_progress"] == 0
+    assert deleted_queue["completed"] == 0
+    assert deleted_queue["failed"] == 0
+    assert deleted_queue["pending_user_action"] == 0
+
+
 def test_get_workqueues(session: Session, client: TestClient):
     generate_basic_data(session)
 

@@ -3,6 +3,8 @@ from datetime import datetime, timedelta
 from typing import List, Optional
 from sqlalchemy.types import String
 
+from collections import defaultdict
+
 from sqlalchemy import or_
 from sqlalchemy.sql import func
 from sqlmodel import Session, select, delete, cast
@@ -17,6 +19,10 @@ from .database_repository import DatabaseRepository, AbstractRepository
 class AbstractWorkqueueRepository(AbstractRepository[Workqueue]):
     @abc.abstractmethod
     def get_workitem_count(self, workqueue_id: int, status: enums.WorkItemStatus):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_all_workitem_counts(self) -> dict[int, dict[enums.WorkItemStatus, int]]:
         raise NotImplementedError
 
     @abc.abstractmethod
@@ -59,6 +65,20 @@ class WorkqueueRepository(DatabaseRepository[Workqueue]):
             .where(WorkItem.workqueue_id == workqueue_id)
             .where(WorkItem.status == status)
         ).first()
+
+    def get_all_workitem_counts(self) -> dict[int, dict[enums.WorkItemStatus, int]]:
+        rows = self.session.exec(
+            select(WorkItem.workqueue_id, WorkItem.status, func.count())
+            .group_by(WorkItem.workqueue_id, WorkItem.status)
+        ).all()
+
+        result: dict[int, dict[enums.WorkItemStatus, int]] = defaultdict(
+            lambda: {s: 0 for s in enums.WorkItemStatus}
+        )
+        for workqueue_id, status, count in rows:
+            result[workqueue_id][status] = count
+
+        return result
 
     def get_by_name(self, name: str) -> Workqueue:
         return self.session.exec(
