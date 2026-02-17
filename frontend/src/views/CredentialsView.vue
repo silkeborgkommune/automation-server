@@ -28,6 +28,7 @@ import { credentialsAPI } from "@/services/automationserver";
 import CredentialsTable from "@/components/CredentialsTable.vue";
 import ContentCard from "@/components/ContentCard.vue";
 import { useAlertStore } from "../stores/alertStore";
+import { useTableStateStore } from "../stores/tableStateStore";
 
 export default {
   name: "CredentialsView",
@@ -35,10 +36,13 @@ export default {
     CredentialsTable,
     ContentCard
   },
+  setup() {
+    const tableStateStore = useTableStateStore();
+    return { tableStateStore };
+  },
   data() {
     return {
-      credentials: [],
-      searchTerm: ""
+      credentials: []
     };
   },
   async created() {
@@ -52,6 +56,14 @@ export default {
     }
   },
   computed: {
+    searchTerm: {
+      get() {
+        return this.tableStateStore.getSearchTerm('credentials');
+      },
+      set(value) {
+        this.tableStateStore.setSearchTerm('credentials', value);
+      }
+    },
     filteredCredentials() {
       return this.credentials.filter(credential => {
         const term = this.searchTerm.toLowerCase();

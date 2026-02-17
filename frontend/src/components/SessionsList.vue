@@ -60,6 +60,7 @@ import ContentCard from "./ContentCard.vue";
 import PageNavigation from "@/components/PageNavigation.vue";
 import { sessionsAPI } from "@/services/automationserver";
 import ProcessLabel from '@/components/ProcessLabel.vue'
+import { useTableStateStore } from '../stores/tableStateStore'
 
 export default {
     name: "SessionsList",
@@ -67,6 +68,10 @@ export default {
         PageNavigation,
         ContentCard,
         ProcessLabel
+    },
+    setup() {
+        const tableStateStore = useTableStateStore()
+        return { tableStateStore }
     },
     props: {
         size: {
@@ -77,12 +82,28 @@ export default {
     data() {
         return {
             sessions: [],
-            page: 1,
             totalPages: 1,
-            searchTerm: "",
             searchTimeout: null,
             refreshInterval: null
         };
+    },
+    computed: {
+        searchTerm: {
+            get() {
+                return this.tableStateStore.getSearchTerm('sessions')
+            },
+            set(value) {
+                this.tableStateStore.setSearchTerm('sessions', value)
+            }
+        },
+        page: {
+            get() {
+                return this.tableStateStore.getPage('sessions')
+            },
+            set(value) {
+                this.tableStateStore.setPage('sessions', value)
+            }
+        }
     },
     async created() {
         await this.fetchSessions();

@@ -31,6 +31,7 @@
 <script>
 import { workqueuesAPI } from '@/services/automationserver.js'
 import { useAlertStore } from '../stores/alertStore'
+import { useTableStateStore } from '../stores/tableStateStore'
 import ContentCard from '@/components/ContentCard.vue'
 import WorkqueuesTable from '@/components/WorkqueuesTable.vue'
 
@@ -42,14 +43,25 @@ export default {
     ContentCard,
     WorkqueuesTable
   },
+  setup() {
+    const tableStateStore = useTableStateStore()
+    return { tableStateStore }
+  },
   data() {
     return {
       workqueues: [],
-      searchTerm: '',
       loading: true,
     }
   },
   computed: {
+    searchTerm: {
+      get() {
+        return this.tableStateStore.getSearchTerm('workqueues')
+      },
+      set(value) {
+        this.tableStateStore.setSearchTerm('workqueues', value)
+      }
+    },
     filteredWorkqueues() {
       return this.workqueues.filter((workqueue) =>
         workqueue.name.toLowerCase().includes(this.searchTerm.toLowerCase())

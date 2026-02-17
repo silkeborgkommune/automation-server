@@ -33,6 +33,7 @@ import ProcessesTable from '@/components/ProcessesTable.vue'
 import ContentCard from '@/components/ContentCard.vue'
 
 import { useAlertStore } from '../stores/alertStore'
+import { useTableStateStore } from '../stores/tableStateStore'
 
 export default {
   name: 'ProcessesView',
@@ -40,13 +41,24 @@ export default {
     ProcessesTable,
     ContentCard
   },
+  setup() {
+    const tableStateStore = useTableStateStore()
+    return { tableStateStore }
+  },
   data() {
     return {
-      processes: [],
-      searchTerm: ''
+      processes: []
     }
   },
   computed: {
+    searchTerm: {
+      get() {
+        return this.tableStateStore.getSearchTerm('processes')
+      },
+      set(value) {
+        this.tableStateStore.setSearchTerm('processes', value)
+      }
+    },
     filteredProcesses() {
       return this.processes.filter((process) =>
         process.name.toLowerCase().includes(this.searchTerm.toLowerCase())
