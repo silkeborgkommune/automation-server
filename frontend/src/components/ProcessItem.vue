@@ -1,10 +1,22 @@
 <!-- ProcessItem.vue -->
 <template>
-  <tr class="hover:bg-base-300 cursor-pointer">
-    <td @click="edit()">{{ process.name }}</td>
-    <td @click="edit()">{{ process.description }}</td>
-    <td @click="edit()">{{ process.target_type }}</td>
-    <td @click="edit()">{{ process.requirements }}</td>
+  <tr class="hover:bg-base-300">
+    <td class="p-0">
+      <router-link :to="{ name: 'process.edit', params: { id: process.id } }"
+        class="block px-4 py-3 no-underline text-inherit">{{ process.name }}</router-link>
+    </td>
+    <td class="p-0">
+      <router-link :to="{ name: 'process.edit', params: { id: process.id } }"
+        class="block px-4 py-3 no-underline text-inherit">{{ process.description }}</router-link>
+    </td>
+    <td class="p-0">
+      <router-link :to="{ name: 'process.edit', params: { id: process.id } }"
+        class="block px-4 py-3 no-underline text-inherit">{{ process.target_type }}</router-link>
+    </td>
+    <td class="p-0">
+      <router-link :to="{ name: 'process.edit', params: { id: process.id } }"
+        class="block px-4 py-3 no-underline text-inherit">{{ process.requirements }}</router-link>
+    </td>
   </tr>
 </template>
 
@@ -16,16 +28,6 @@ export default {
       type: Object,
       required: true
     }
-  },
-  methods: {
-    edit() {
-      this.$router.push({ name: 'process.edit', params: { id: this.process.id } })
-    }
   }
 }
 </script>
-<style scoped>
-td {
-  cursor: pointer;
-}
-</style>

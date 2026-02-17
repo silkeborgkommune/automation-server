@@ -1,8 +1,19 @@
 <template>
-  <tr class="hover:bg-base-300 cursor-pointer">
-    <td @click="edit()">{{ credential.name }}</td>
-    <td @click="edit()">{{ credential.username }}</td>
-    <td @click="edit()"><json-view :jsonData="credential.data" /></td>
+  <tr class="hover:bg-base-300">
+    <td class="p-0">
+      <router-link :to="{ name: 'credential.edit', params: { id: credential.id } }"
+        class="block px-4 py-3 no-underline text-inherit">{{ credential.name }}</router-link>
+    </td>
+    <td class="p-0">
+      <router-link :to="{ name: 'credential.edit', params: { id: credential.id } }"
+        class="block px-4 py-3 no-underline text-inherit">{{ credential.username }}</router-link>
+    </td>
+    <td class="p-0">
+      <router-link :to="{ name: 'credential.edit', params: { id: credential.id } }"
+        class="block px-4 py-3 no-underline text-inherit">
+        <json-view :jsonData="credential.data" />
+      </router-link>
+    </td>
   </tr>
 </template>
 
@@ -19,17 +30,6 @@ export default {
       type: Object,
       required: true
     }
-  },
-  methods: {
-    edit() {
-      this.$router.push({ name: 'credential.edit', params: { id: this.credential.id } })
-    }
   }
 }
 </script>
-
-<style scoped>
-td {
-  cursor: pointer;
-}
-</style>

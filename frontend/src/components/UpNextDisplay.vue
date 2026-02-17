@@ -36,25 +36,37 @@
           </tr>
         </thead>
         <tbody>
-          <tr 
-            v-for="execution in filteredExecutions" 
+          <tr
+            v-for="execution in filteredExecutions"
             :key="`${execution.trigger_id}-${execution.next_execution}`"
-            class="hover:bg-base-300 cursor-pointer"
-            @click="navigateToProcess(execution.process_id)"
+            class="hover:bg-base-300"
           >
-            <td class="text-left">
-              {{ execution.process_name }}
+            <td class="text-left p-0">
+              <router-link :to="{ name: 'process.edit', params: { id: execution.process_id } }"
+                class="block px-4 py-3 no-underline text-inherit">{{ execution.process_name }}</router-link>
             </td>
-            <td class="text-center">
-              <span class="badge badge-sm badge-ghost">
-                {{ execution.trigger_type }}
-              </span>
+            <td class="text-center p-0">
+              <router-link :to="{ name: 'process.edit', params: { id: execution.process_id } }"
+                class="block px-4 py-3 no-underline text-inherit">
+                <span class="badge badge-sm badge-ghost">
+                  {{ execution.trigger_type }}
+                </span>
+              </router-link>
             </td>
-            <td class="text-center">{{ formatExecutionTime(execution.next_execution) }}</td>
-            <td class="text-center">{{ formatRelativeTime(execution.next_execution) }}</td>
-            <td class="text-left">
-              <span v-if="execution.parameters" class="text-xs">{{ execution.parameters }}</span>
-              <span v-else class="text-base-content/50">-</span>
+            <td class="text-center p-0">
+              <router-link :to="{ name: 'process.edit', params: { id: execution.process_id } }"
+                class="block px-4 py-3 no-underline text-inherit">{{ formatExecutionTime(execution.next_execution) }}</router-link>
+            </td>
+            <td class="text-center p-0">
+              <router-link :to="{ name: 'process.edit', params: { id: execution.process_id } }"
+                class="block px-4 py-3 no-underline text-inherit">{{ formatRelativeTime(execution.next_execution) }}</router-link>
+            </td>
+            <td class="text-left p-0">
+              <router-link :to="{ name: 'process.edit', params: { id: execution.process_id } }"
+                class="block px-4 py-3 no-underline text-inherit">
+                <span v-if="execution.parameters" class="text-xs">{{ execution.parameters }}</span>
+                <span v-else class="text-base-content/50">-</span>
+              </router-link>
             </td>
           </tr>
         </tbody>
@@ -145,9 +157,6 @@ export default {
         const diffDays = Math.floor(diffHours / 24)
         return diffDays === 1 ? 'in 1 day' : `in ${diffDays} days`
       }
-    },
-    navigateToProcess(processId) {
-      this.$router.push({ name: 'process.edit', params: { id: processId } })
     }
   }
 }

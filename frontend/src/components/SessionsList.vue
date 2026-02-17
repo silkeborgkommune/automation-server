@@ -20,23 +20,43 @@
                     </tr>
                 </thead>
                 <tbody>
-					<tr v-for="session in sessions" :key="session.id" 
-						:class="['cursor-pointer', 'hover:bg-base-300', { 'bg-error/30': session.status === 'failed' }]">
-						<td @click="edit(session.id)" class="text-center">{{ session.id }}</td>
-						<td @click="edit(session.id)"><process-label :process-id="session.process_id" /></td>
-						<td @click="edit(session.id)" class="text-center">
-							<font-awesome-icon v-if="session.status === 'new'" :icon="['fas', 'circle']" class="text-info" :title="session.status" />
-							<font-awesome-icon v-else-if="session.status === 'in progress'" :icon="['fas', 'spinner']" spin class="text-warning" :title="session.status" />
-							<font-awesome-icon v-else-if="session.status === 'completed'" :icon="['fas', 'circle-check']" class="text-success" :title="session.status" />
-							<font-awesome-icon v-else-if="session.status === 'failed'" :icon="['fas', 'triangle-exclamation']" class="text-error" :title="session.status" />
-						</td>
-						<td @click="edit(session.id)" class="text-center">{{ $formatDateTime(session.created_at) }}</td>
-						<td @click="edit(session.id)" class="text-center">{{ $formatDateTime(session.dispatched_at) }}</td>
-						<td @click="edit(session.id)" class="text-center">{{ $formatDateTime(session.updated_at) }}</td>
-					</tr>
+                    <tr v-for="session in sessions" :key="session.id"
+                        :class="['hover:bg-base-300', { 'bg-error/30': session.status === 'failed' }]">
+                        <td class="text-center p-0">
+                            <router-link :to="{ name: 'session.edit', params: { id: session.id } }"
+                                class="block px-4 py-3 no-underline text-inherit">{{ session.id }}</router-link>
+                        </td>
+                        <td class="p-0">
+                            <router-link :to="{ name: 'session.edit', params: { id: session.id } }"
+                                class="block px-4 py-3 no-underline text-inherit">
+                                <process-label :process-id="session.process_id" />
+                            </router-link>
+                        </td>
+                        <td class="text-center p-0">
+                            <router-link :to="{ name: 'session.edit', params: { id: session.id } }"
+                                class="block px-4 py-3 no-underline text-inherit">
+                                <font-awesome-icon v-if="session.status === 'new'" :icon="['fas', 'circle']" class="text-info" :title="session.status" />
+                                <font-awesome-icon v-else-if="session.status === 'in progress'" :icon="['fas', 'spinner']" spin class="text-warning" :title="session.status" />
+                                <font-awesome-icon v-else-if="session.status === 'completed'" :icon="['fas', 'circle-check']" class="text-success" :title="session.status" />
+                                <font-awesome-icon v-else-if="session.status === 'failed'" :icon="['fas', 'triangle-exclamation']" class="text-error" :title="session.status" />
+                            </router-link>
+                        </td>
+                        <td class="text-center p-0">
+                            <router-link :to="{ name: 'session.edit', params: { id: session.id } }"
+                                class="block px-4 py-3 no-underline text-inherit">{{ $formatDateTime(session.created_at) }}</router-link>
+                        </td>
+                        <td class="text-center p-0">
+                            <router-link :to="{ name: 'session.edit', params: { id: session.id } }"
+                                class="block px-4 py-3 no-underline text-inherit">{{ $formatDateTime(session.dispatched_at) }}</router-link>
+                        </td>
+                        <td class="text-center p-0">
+                            <router-link :to="{ name: 'session.edit', params: { id: session.id } }"
+                                class="block px-4 py-3 no-underline text-inherit">{{ $formatDateTime(session.updated_at) }}</router-link>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
-            
+
             <!-- Pagination Wrapper -->
             <div class="pr-4">
                 <page-navigation :currentPage="page" :totalPages="totalPages"
@@ -141,9 +161,6 @@ export default {
         },
         stopAutoRefresh() {
             clearInterval(this.refreshInterval);
-        },
-        edit(id) {
-            this.$router.push({ name: 'session.edit', params: { id: id } })
         }
     }
 };
