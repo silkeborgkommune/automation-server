@@ -123,15 +123,8 @@ export default {
                 this.searchTerm
             );
 
-            if (response.total_pages === 0) {
-                this.sessions = [];
-                this.totalPages = 0;
-                this.page = 0;
-                return;
-            }
-
-            this.sessions = response.items;
-            this.totalPages = response.total_pages;
+            this.sessions = response.items || [];
+            this.totalPages = response.total_pages || 1;
             if (this.page > this.totalPages) {
                 this.page = this.totalPages;
                 this.fetchSessions();

@@ -140,13 +140,8 @@
           this.searchTerm
         );
   
-        if (response.total_pages === 0) {
-          this.workitems = [];
-          return;
-        }
-  
-        this.workitems = response.items;
-        this.totalPages = response.total_pages;
+        this.workitems = response.items || [];
+        this.totalPages = response.total_pages || 1;
         if (this.page > this.totalPages && this.totalPages > 0) {
           this.page = this.totalPages;
           this.fetchWorkItems();
