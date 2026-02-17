@@ -36,9 +36,10 @@ import ContentCard from "./ContentCard.vue";
 import PageNavigation from "@/components/PageNavigation.vue";
 import SearchInput from "./SearchInput.vue";
 import { auditLogsAPI } from "@/services/automationserver";
+import { useTableStateStore } from "@/stores/tableStateStore";
 
 export default {
-    name: "SessionsList",
+    name: "AuditLogList",
     components: {
         PageNavigation,
         ContentCard,
@@ -57,22 +58,40 @@ export default {
     data() {
         return {
             logs: [],
-            page: 1,
             totalPages: 1,
-            searchTerm: "",
             searchTimeout: null,
         };
     },
+    setup() {
+        const tableStateStore = useTableStateStore();
+        return { tableStateStore };
+    },
+    computed: {
+        searchTerm: {
+            get() {
+                return this.tableStateStore.getSearchTerm('auditlog-' + this.session_id);
+            },
+            set(value) {
+                this.tableStateStore.setSearchTerm('auditlog-' + this.session_id, value);
+            }
+        },
+        page: {
+            get() {
+                return this.tableStateStore.getPage('auditlog-' + this.session_id);
+            },
+            set(value) {
+                this.tableStateStore.setPage('auditlog-' + this.session_id, value);
+            }
+        }
+    },
     async created() {
         await this.fetchLogs();
-    },
-    async unmounted() {
     },
     watch: {
         searchTerm() {
             clearTimeout(this.searchTimeout);
             this.searchTimeout = setTimeout(async () => {
-                this.page = 1; // Reset to first page when search term changes
+                // The store already resets page to 1 when search term changes
                 await this.fetchLogs();
             }, 300); // 300ms delay
         }
@@ -86,12 +105,9 @@ export default {
                 this.searchTerm
             );
 
-            if (response.total_pages === 0)
-                return;
-
-            this.logs = response.items;
-            this.totalPages = response.total_pages;
-            if (this.page > this.totalPages) {
+            this.logs = response.items || [];
+            this.totalPages = response.total_pages || 1;
+            if (this.page > this.totalPages && this.totalPages > 0) {
                 this.page = this.totalPages;
                 this.fetchLogs();
             }
@@ -100,9 +116,6 @@ export default {
             this.page = newPage;
             this.fetchLogs();
         },
-        edit(id) {
-            this.$router.push({ name: 'session.edit', params: { id: id } })
-        }
     }
 };
 </script>

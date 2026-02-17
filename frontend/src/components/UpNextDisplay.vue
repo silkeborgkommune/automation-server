@@ -64,8 +64,6 @@
 </template>
 
 <script>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
 import { triggersAPI } from '@/services/automationserver'
 import ContentCard from './ContentCard.vue'
 import SearchInput from './SearchInput.vue'
@@ -76,64 +74,69 @@ export default {
     ContentCard,
     SearchInput
   },
-  setup() {
-    const router = useRouter()
-    
-    // Reactive state
-    const executions = ref([])
-    const isLoading = ref(false)
-    const error = ref(null)
-    const searchTerm = ref('')
-    const refreshInterval = ref(null)
+  data() {
+    return {
+      executions: [],
+      isLoading: false,
+      error: null,
+      searchTerm: '',
+      refreshInterval: null
+    }
+  },
+  computed: {
+    filteredExecutions() {
+      if (!this.searchTerm) return this.executions
 
-    // Computed properties
-    const filteredExecutions = computed(() => {
-      if (!searchTerm.value) return executions.value
-      
-      const search = searchTerm.value.toLowerCase()
-      return executions.value.filter(execution => 
+      const search = this.searchTerm.toLowerCase()
+      return this.executions.filter(execution =>
         execution.process_name.toLowerCase().includes(search) ||
         execution.process_description?.toLowerCase().includes(search) ||
         execution.trigger_type.toLowerCase().includes(search)
       )
-    })
+    }
+  },
+  async created() {
+    await this.refreshExecutions()
+    this.refreshInterval = setInterval(this.refreshExecutions, 60000)
+  },
+  unmounted() {
+    if (this.refreshInterval) {
+      clearInterval(this.refreshInterval)
+    }
+  },
+  methods: {
+    async refreshExecutions() {
+      this.isLoading = true
+      this.error = null
 
-    // Methods
-    const refreshExecutions = async () => {
-      isLoading.value = true
-      error.value = null
-      
       try {
-        const data = await triggersAPI.getUpcomingExecutions()
-        executions.value = data
+        this.executions = await triggersAPI.getUpcomingExecutions()
       } catch (err) {
-        error.value = 'Failed to load upcoming executions'
+        this.error = 'Failed to load upcoming executions'
         console.error('Error loading upcoming executions:', err)
       } finally {
-        isLoading.value = false
+        this.isLoading = false
       }
-    }
-
-    const formatExecutionTime = (isoString) => {
+    },
+    formatExecutionTime(isoString) {
       const date = new Date(isoString)
       const now = new Date()
       const isToday = date.toDateString() === now.toDateString()
       const isTomorrow = date.toDateString() === new Date(now.getTime() + 24 * 60 * 60 * 1000).toDateString()
-      
+
       const timeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      
+
       if (isToday) return `Today ${timeString}`
       if (isTomorrow) return `Tomorrow ${timeString}`
       return `${date.toLocaleDateString()} ${timeString}`
-    }
-
-    const formatRelativeTime = (isoString) => {
+    },
+    formatRelativeTime(isoString) {
       const date = new Date(isoString)
       const now = new Date()
       const diffMs = date.getTime() - now.getTime()
       const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
       const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60))
-      
+
       if (diffHours < 1) {
         return diffMinutes <= 1 ? 'in 1 minute' : `in ${diffMinutes} minutes`
       } else if (diffHours < 24) {
@@ -142,46 +145,9 @@ export default {
         const diffDays = Math.floor(diffHours / 24)
         return diffDays === 1 ? 'in 1 day' : `in ${diffDays} days`
       }
-    }
-
-    const navigateToProcess = (processId) => {
-      router.push({ name: 'process.edit', params: { id: processId } })
-    }
-
-
-
-    const startAutoRefresh = () => {
-      // Refresh every 1 minute
-      refreshInterval.value = setInterval(refreshExecutions, 60000)
-    }
-
-    const stopAutoRefresh = () => {
-      if (refreshInterval.value) {
-        clearInterval(refreshInterval.value)
-        refreshInterval.value = null
-      }
-    }
-
-    // Lifecycle hooks
-    onMounted(() => {
-      refreshExecutions()
-      startAutoRefresh()
-    })
-
-    onUnmounted(() => {
-      stopAutoRefresh()
-    })
-
-    return {
-      executions,
-      isLoading,
-      error,
-      searchTerm,
-      filteredExecutions,
-      refreshExecutions,
-      formatExecutionTime,
-      formatRelativeTime,
-      navigateToProcess
+    },
+    navigateToProcess(processId) {
+      this.$router.push({ name: 'process.edit', params: { id: processId } })
     }
   }
 }
