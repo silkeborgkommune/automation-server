@@ -1,16 +1,7 @@
 <template>
   <content-card title="Up Next">
     <template v-slot:header-right>
-      <div class="join">
-        <!-- Font Awesome Icon Button (Small) -->
-        <button class="join-item btn btn-square btn-sm">
-          <font-awesome-icon :icon="['fas', 'search']" />
-        </button>
-
-        <!-- Input Field (Small) -->
-        <input type="text" v-model="searchTerm" placeholder="Search processes..."
-            class="join-item input input-bordered input-sm w-full max-w-xs" />
-      </div>
+      <search-input v-model="searchTerm" placeholder="Search processes..." />
     </template>
 
     <!-- Loading state -->
@@ -77,11 +68,13 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { triggersAPI } from '@/services/automationserver'
 import ContentCard from './ContentCard.vue'
+import SearchInput from './SearchInput.vue'
 
 export default {
   name: 'UpNextDisplay',
   components: {
-    ContentCard
+    ContentCard,
+    SearchInput
   },
   setup() {
     const router = useRouter()

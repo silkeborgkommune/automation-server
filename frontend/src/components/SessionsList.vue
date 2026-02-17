@@ -1,16 +1,7 @@
 <template>
     <content-card title="Sessions">
         <template v-slot:header-right>
-            <div class="join">
-                <!-- Font Awesome Icon Button (Small) -->
-                <button class="join-item btn btn-square btn-sm">
-                    <font-awesome-icon :icon="['fas', 'search']" />
-                </button>
-
-                <!-- Input Field (Small) -->
-                <input type="text" v-model="searchTerm" placeholder="Search sessions..."
-                    class="join-item input input-bordered input-sm w-full max-w-xs" />
-            </div>
+            <search-input v-model="searchTerm" placeholder="Search sessions..." />
         </template>
         <div v-if="sessions.length === 0" class="text-center mb-4">
             <p class="secondary-content font-semibold">No sessions found matching search.</p>
@@ -60,6 +51,7 @@ import ContentCard from "./ContentCard.vue";
 import PageNavigation from "@/components/PageNavigation.vue";
 import { sessionsAPI } from "@/services/automationserver";
 import ProcessLabel from '@/components/ProcessLabel.vue'
+import SearchInput from '@/components/SearchInput.vue'
 import { useTableStateStore } from '../stores/tableStateStore'
 
 export default {
@@ -67,7 +59,8 @@ export default {
     components: {
         PageNavigation,
         ContentCard,
-        ProcessLabel
+        ProcessLabel,
+        SearchInput
     },
     setup() {
         const tableStateStore = useTableStateStore()

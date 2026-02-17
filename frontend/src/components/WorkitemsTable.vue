@@ -1,18 +1,7 @@
 <template>
   <content-card title="Workitems">
     <template v-slot:header-right>
-      <!-- Search Input Group -->
-      <div class="join input-dropdown-container">
-        <button class="join-item btn btn-square btn-sm">
-          <font-awesome-icon :icon="['fas', 'search']" />
-        </button>
-        <input
-          type="text"
-          v-model="searchTerm"
-          placeholder="Search workitems..."
-          class="join-item input input-bordered input-sm w-full max-w-xs"
-        />
-      </div>
+      <search-input v-model="searchTerm" placeholder="Search workitems..." />
       <dropdown-button
           class="join-item"
           :items="[
@@ -76,16 +65,18 @@
   import { workqueuesAPI } from "@/services/automationserver";
   import WorkItemRow from "./WorkItemRow.vue";
   import DropdownButton from "./DropdownButton.vue";
-  import { useWorkitemsStore } from "@/stores/workitemsStore";
+  import SearchInput from "./SearchInput.vue";
+  import { useTableStateStore } from "@/stores/tableStateStore";
 
-  
+
   export default {
     name: "WorkitemsTable",
     components: {
       PageNavigation,
       ContentCard,
       WorkItemRow,
-      DropdownButton
+      DropdownButton,
+      SearchInput
     },
     props: {
       size: {
@@ -103,28 +94,28 @@
         totalPages: 1,
         searchTimeout: null,
         refreshInterval: null,
-        dropdownOpen: false   
+        dropdownOpen: false
       };
     },
     setup() {
-      const workitemsStore = useWorkitemsStore();
-      return { workitemsStore };
+      const tableStateStore = useTableStateStore();
+      return { tableStateStore };
     },
     computed: {
       searchTerm: {
         get() {
-          return this.workitemsStore.getWorkqueueState(this.workqueueId).searchTerm;
+          return this.tableStateStore.getSearchTerm('workitems-' + this.workqueueId);
         },
         set(value) {
-          this.workitemsStore.setSearchTerm(this.workqueueId, value);
+          this.tableStateStore.setSearchTerm('workitems-' + this.workqueueId, value);
         }
       },
       page: {
         get() {
-          return this.workitemsStore.getWorkqueueState(this.workqueueId).page;
+          return this.tableStateStore.getPage('workitems-' + this.workqueueId);
         },
         set(value) {
-          this.workitemsStore.setPage(this.workqueueId, value);
+          this.tableStateStore.setPage('workitems-' + this.workqueueId, value);
         }
       }
     },
@@ -181,8 +172,4 @@
   </script>
   
   <style scoped>
-  .input-dropdown-container {
-    display: flex;
-    align-items: center;
-  }
   </style>

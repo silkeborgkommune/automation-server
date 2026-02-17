@@ -1,16 +1,7 @@
 <template>
   <content-card title="Credentials">
     <template v-slot:header-right>
-      <div class="join">
-        <!-- Search Icon Button (Small) -->
-        <button class="join-item btn btn-square btn-sm">
-          <font-awesome-icon :icon="['fas', 'search']" />
-        </button>
-
-        <!-- Input Field (Small) -->
-        <input type="text" v-model="searchTerm" placeholder="Search credentials..."
-          class="join-item input input-bordered input-sm w-full max-w-xs" />
-      </div>
+      <search-input v-model="searchTerm" placeholder="Search credentials..." />
 
       <router-link :to="{ name: 'credential.create' }" class="btn btn-primary btn-sm">+ Create</router-link>
     </template>
@@ -27,6 +18,7 @@
 import { credentialsAPI } from "@/services/automationserver";
 import CredentialsTable from "@/components/CredentialsTable.vue";
 import ContentCard from "@/components/ContentCard.vue";
+import SearchInput from "@/components/SearchInput.vue";
 import { useAlertStore } from "../stores/alertStore";
 import { useTableStateStore } from "../stores/tableStateStore";
 
@@ -34,7 +26,8 @@ export default {
   name: "CredentialsView",
   components: {
     CredentialsTable,
-    ContentCard
+    ContentCard,
+    SearchInput
   },
   setup() {
     const tableStateStore = useTableStateStore();

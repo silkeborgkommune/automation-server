@@ -1,16 +1,7 @@
 <template>
     <content-card title="Audit Log">
         <template v-slot:header-right>
-            <div class="join">
-                <!-- Search Icon Button as part of join group -->
-                <button class="join-item btn btn-square btn-sm">
-                    <font-awesome-icon :icon="['fas', 'search']" />
-                </button>
-
-                <!-- Search Input Field as part of join group -->
-                <input type="text" v-model="searchTerm" placeholder="Search logs..."
-                    class="join-item input input-bordered input-sm w-full max-w-xs" />
-            </div>
+            <search-input v-model="searchTerm" placeholder="Search logs..." />
         </template>
 
 
@@ -43,6 +34,7 @@
 <script>
 import ContentCard from "./ContentCard.vue";
 import PageNavigation from "@/components/PageNavigation.vue";
+import SearchInput from "./SearchInput.vue";
 import { auditLogsAPI } from "@/services/automationserver";
 
 export default {
@@ -50,6 +42,7 @@ export default {
     components: {
         PageNavigation,
         ContentCard,
+        SearchInput,
     },
     props: {
         session_id: {
