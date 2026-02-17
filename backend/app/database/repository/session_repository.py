@@ -1,7 +1,8 @@
 from typing import List, Optional
 
 from sqlalchemy.sql import func
-from sqlmodel import Session as SqlSession, select, or_
+from sqlalchemy.types import String
+from sqlmodel import Session as SqlSession, cast, select, or_
 
 from app.database.models import Process, Session, AuditLog
 import app.enums as enums
@@ -125,7 +126,12 @@ class SessionRepository(AbstractSessionRepository, DatabaseRepository[Session]):
             query = query.filter(Session.deleted == False)  # noqa: E712
 
         if search:
-            query = query.join(Session.process).filter(Process.name.ilike(f"%{search}%"))
+            query = query.join(Session.process).filter(
+                or_(
+                    Process.name.ilike(f"%{search}%"),
+                    cast(Session.status, String).ilike(f"%{search}%"),
+                )
+            )
 
         # Sort in descending order by default
         query = query.order_by(Session.id.desc())
