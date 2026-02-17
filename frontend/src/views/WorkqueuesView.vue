@@ -2,7 +2,7 @@
   <content-card title="Workqueues">
     <template v-slot:header-right>
       <search-input v-model="searchTerm" placeholder="Search workqueues..." />
-      <router-link :to="{ name: 'workqueue.create' }" class="join-item btn btn-primary btn-sm">+ Create</router-link>
+      <router-link :to="{ name: 'workqueue.create' }" class="btn btn-primary btn-sm">+ Create</router-link>
     </template>
     <div v-if="loading" class="text-center mb-4">
       <p class="secondary-content font-semibold">Loading workqueues...</p>
@@ -65,9 +65,6 @@ export default {
     async refreshWorkqueues() {
       try {
         this.workqueues = await workqueuesAPI.getWorkqueuesWithInformation(false)
-
-        // Sort workqueues by name
-        this.workqueues.sort((a, b) => a.name.localeCompare(b.name))
       } catch (error) {
         alertStore.addAlert({ type: 'error', message: error })
       }

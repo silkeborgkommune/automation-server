@@ -6,7 +6,7 @@
         <div v-if="sessions.length === 0" class="text-center mb-4">
             <p class="secondary-content font-semibold">No sessions found matching search.</p>
         </div>
-        <div v-if="sessions.length > 0">
+        <div v-else>
             <!-- Table -->
             <table class="table w-full mb-3">
                 <thead>
@@ -109,7 +109,7 @@ export default {
         searchTerm() {
             clearTimeout(this.searchTimeout);
             this.searchTimeout = setTimeout(async () => {
-                this.page = 1; // Reset to first page when search term changes
+                // The store already resets page to 1 when search term changes
                 await this.fetchSessions();
             }, 300); // 300ms delay
         }
@@ -125,7 +125,7 @@ export default {
 
             this.sessions = response.items || [];
             this.totalPages = response.total_pages || 1;
-            if (this.page > this.totalPages) {
+            if (this.page > this.totalPages && this.totalPages > 0) {
                 this.page = this.totalPages;
                 this.fetchSessions();
             }

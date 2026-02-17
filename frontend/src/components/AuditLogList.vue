@@ -5,7 +5,10 @@
         </template>
 
 
-        <div v-if="logs.length > 0">
+        <div v-if="logs.length === 0" class="text-center mb-4">
+            <p class="secondary-content font-semibold">No logs found matching search.</p>
+        </div>
+        <div v-else>
             <table class="table w-full mb-3 rounded-b-lg">
                 <thead>
                     <tr>
@@ -24,10 +27,6 @@
             <div class="pr-4">
                 <page-navigation :currentPage="page" :totalPages="totalPages" @change-page="handlePageChange" />
             </div>
-        </div>
-
-        <div v-if="logs.length === 0">
-            <div class="text-center text-base-content/60">No logs found</div>
         </div>
     </content-card>
 </template>

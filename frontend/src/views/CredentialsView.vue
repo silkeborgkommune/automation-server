@@ -7,7 +7,7 @@
     </template>
 
     <div v-if="filteredCredentials.length === 0" class="text-center mb-4">
-      <p class="secondary-content font-semibold">No credentials found.</p>
+      <p class="secondary-content font-semibold">No credentials found matching search.</p>
     </div>
 
     <CredentialsTable :credentials="filteredCredentials" v-if="filteredCredentials.length !== 0" />
