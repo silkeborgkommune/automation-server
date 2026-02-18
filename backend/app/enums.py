@@ -32,3 +32,16 @@ class TriggerType(str, enum.Enum):
     CRON = 'cron'
     WORKQUEUE = 'workqueue'
     DATE = 'date'
+
+class IncidentStatus(str, enum.Enum):
+    NEW = "new"
+    DISMISSED = "dismissed"
+    RESCHEDULED = "rescheduled"
+
+    def can_transition_to(self, new_status: "IncidentStatus") -> bool:
+        transition_map = {
+            IncidentStatus.NEW: {IncidentStatus.DISMISSED, IncidentStatus.RESCHEDULED},
+            IncidentStatus.DISMISSED: set(),
+            IncidentStatus.RESCHEDULED: set(),
+        }
+        return new_status in transition_map[self]

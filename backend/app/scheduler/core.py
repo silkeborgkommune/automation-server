@@ -14,9 +14,11 @@ from app.database.repository import (
     SessionRepository,
     ResourceRepository,
     WorkqueueRepository,
-    ProcessRepository
+    ProcessRepository,
+    AuditLogRepository,
+    IncidentRepository,
 )
-from app.services import ResourceService, SessionService, WorkqueueService
+from app.services import ResourceService, SessionService, WorkqueueService, IncidentService
 from app.config import settings
 from .trigger_processors import ProcessingServices, TriggerProcessorRegistry
 from .dispatcher import ResourceDispatcher
@@ -59,11 +61,19 @@ class AutomationScheduler:
             resource_repository = ResourceRepository(session)
             workqueue_repository = WorkqueueRepository(session)
             process_repository = ProcessRepository(session)
+            auditlog_repository = AuditLogRepository(session)
+            incident_repository = IncidentRepository(session)
 
             # Initialize services
             resource_service = ResourceService(resource_repository, session_repository)
             session_service = SessionService(session_repository, resource_repository)
             workqueue_service = WorkqueueService(workqueue_repository)
+            incident_service = IncidentService(
+                incident_repository,
+                auditlog_repository,
+                session_repository,
+                session_service,
+            )
             
             # Initialize processing services container
             processing_services = ProcessingServices(
@@ -84,6 +94,7 @@ class AutomationScheduler:
             # Do housekeeping
             session_service.reschedule_orphaned_sessions()
             session_service.flush_dangling_sessions()
+            incident_service.create_incidents_for_new_failures()
 
             # Dispatch pending sessions first
             self.dispatcher.dispatch_all_pending()

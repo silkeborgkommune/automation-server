@@ -216,6 +216,11 @@ class WorkqueueClear(BaseModel):
     workitem_status: Optional[enums.WorkItemStatus] = None
     days_older_than: Optional[int] = None
 
+class IncidentResolve(BaseModel):
+    status: enums.IncidentStatus
+    resolution_note: Optional[str] = None
+
+
 class UpcomingExecutionRead(BaseModel):
     trigger_id: int = Field(description="Unique identifier for the trigger")
     process_id: int = Field(description="Unique identifier for the associated process")

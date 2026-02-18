@@ -35,6 +35,9 @@ class AbstractAuditLogRepository(AbstractRepository[AuditLog]):
     def get_logs_by_workitem_id(self, workitem_id: int) -> List[AuditLog]:
         raise NotImplementedError
 
+    def get_recent_logs_by_session_id(self, session_id: int, limit: int = 20) -> List[AuditLog]:
+        raise NotImplementedError
+
 
 class AuditLogRepository(AbstractAuditLogRepository, DatabaseRepository[AuditLog]):
     def __init__(self, session: Session) -> None:
@@ -101,3 +104,11 @@ class AuditLogRepository(AbstractAuditLogRepository, DatabaseRepository[AuditLog
             .where(AuditLog.workitem_id == workitem_id)
             .order_by(AuditLog.created_at)
         ).all()
+
+    def get_recent_logs_by_session_id(self, session_id: int, limit: int = 20) -> List[AuditLog]:
+        return list(self.session.scalars(
+            select(AuditLog)
+            .where(AuditLog.session_id == session_id)
+            .order_by(AuditLog.event_timestamp.desc())
+            .limit(limit)
+        ).all())

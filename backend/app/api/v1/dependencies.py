@@ -21,6 +21,7 @@ from app.services import (
     SessionService,
     ResourceService,
     WorkqueueService,
+    IncidentService,
 )
 
 
@@ -54,8 +55,8 @@ def get_repository(model):
         if model == models.AccessToken:
             return repositories.AccessTokenRepository(session)
 
-        if model == models.ClientCredential:
-            return repositories.ClientCredentialRepository(session)
+        if model == models.Incident:
+            return repositories.IncidentRepository(session)
 
         # Add more repositories here
 
@@ -87,6 +88,28 @@ def get_session_service(
     ),
 ) -> SessionService:
     return SessionService(repository, resource_repository)
+
+
+def get_incident_service(
+    incident_repository: repositories.IncidentRepository = Depends(
+        get_repository(models.Incident)
+    ),
+    auditlog_repository: repositories.AuditLogRepository = Depends(
+        get_repository(models.AuditLog)
+    ),
+    session_repository: repositories.SessionRepository = Depends(
+        get_repository(models.Session)
+    ),
+    resource_repository: repositories.ResourceRepository = Depends(
+        get_repository(models.Resource)
+    ),
+) -> IncidentService:
+    return IncidentService(
+        incident_repository,
+        auditlog_repository,
+        session_repository,
+        SessionService(session_repository, resource_repository),
+    )
 
 
 def get_resource_service(

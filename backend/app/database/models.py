@@ -229,6 +229,34 @@ class AuditLog(Base, table=True):
     )  # DB insertion time
 
 
+class Incident(Base, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+
+    session_id: int = Field(foreign_key="session.id")
+    session: typing.Optional[Session] = Relationship(
+        sa_relationship_kwargs={"foreign_keys": "[Incident.session_id]"}
+    )
+
+    process_id: int = Field(foreign_key="process.id")
+
+    status: enums.IncidentStatus = Field(default=enums.IncidentStatus.NEW)
+
+    error_trace: typing.List = Field(default=[], sa_type=JSONB)
+
+    resolution_note: typing.Optional[str] = None
+
+    ai_resolution_suggestion: typing.Optional[str] = None
+
+    rescheduled_session_id: typing.Optional[int] = Field(
+        default=None, foreign_key="session.id"
+    )
+
+    deleted: bool = False
+
+    created_at: datetime = Field(default_factory=lambda: datetime.now())
+    updated_at: datetime = Field(default_factory=lambda: datetime.now())
+
+
 class AccessToken(Base, table=True):
     id: int = Field(default=None, primary_key=True)
     identifier: str = Field(index=True, unique=True)

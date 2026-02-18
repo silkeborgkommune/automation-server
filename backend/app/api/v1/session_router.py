@@ -20,9 +20,11 @@ from app.services import SessionService
 from .dependencies import (
     get_unit_of_work,
     get_session_service,
+    get_incident_service,
     get_paginated_search_params,
     resolve_access_token,
 )
+from app.services import IncidentService
 
 from . import error_descriptions
 
@@ -108,6 +110,7 @@ def update_session_status(
     update: SessionStatusUpdate,
     session: Session = Depends(get_session),
     uow: AbstractUnitOfWork = Depends(get_unit_of_work),
+    incident_service: IncidentService = Depends(get_incident_service),
     token: AccessToken = Depends(resolve_access_token),
 ) -> Session:
     if not session.status.can_transition_to(update.status):
@@ -127,7 +130,12 @@ def update_session_status(
 
         data = {"status": update.status}
 
-        return uow.sessions.update(session, data)
+        updated_session = uow.sessions.update(session, data)
+
+        if update.status == enums.SessionStatus.FAILED:
+            incident_service.create_incident_for_session(updated_session)
+
+        return updated_session
 
 
 @router.post(

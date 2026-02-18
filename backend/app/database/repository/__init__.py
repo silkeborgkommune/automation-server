@@ -40,3 +40,8 @@ from .workitem_repository import (
     WorkItemRepository as WorkItemRepository,
     AbstractWorkItemRepository as AbstractWorkItemRepository,
 )
+
+from .incident_repository import (
+    IncidentRepository as IncidentRepository,
+    AbstractIncidentRepository as AbstractIncidentRepository,
+)
