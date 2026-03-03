@@ -19,6 +19,9 @@ export const useTableStateStore = defineStore('tableState', {
     },
     getPage: (state) => (viewId) => {
       return state.tables[viewId]?.page || 1
+    },
+    getOption: (state) => (viewId, key, defaultValue) => {
+      return state.tables[viewId]?.options?.[key] ?? defaultValue
     }
   },
   actions: {
@@ -34,6 +37,15 @@ export const useTableStateStore = defineStore('tableState', {
         this.tables[viewId] = { searchTerm: '', page: 1 }
       }
       this.tables[viewId].page = value
+    },
+    setOption(viewId, key, value) {
+      if (!this.tables[viewId]) {
+        this.tables[viewId] = { searchTerm: '', page: 1 }
+      }
+      if (!this.tables[viewId].options) {
+        this.tables[viewId].options = {}
+      }
+      this.tables[viewId].options[key] = value
     },
     clearState(viewId) {
       delete this.tables[viewId]

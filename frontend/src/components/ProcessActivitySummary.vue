@@ -1,7 +1,20 @@
 <template>
-    <content-card title="Process Activity (24h)">
+    <content-card title="Process Activity">
+        <template v-slot:header-right>
+            <select
+                v-model="selectedHours"
+                class="select select-sm select-bordered"
+            >
+                <option :value="1">Last 1h</option>
+                <option :value="3">Last 3h</option>
+                <option :value="12">Last 12h</option>
+                <option :value="24">Last 24h</option>
+                <option :value="48">Last 48h</option>
+                <option :value="72">Last 72h</option>
+            </select>
+        </template>
         <div v-if="items.length === 0" class="text-center mb-4">
-            <p class="secondary-content font-semibold">No process activity in the last 24 hours.</p>
+            <p class="secondary-content font-semibold">No process activity in the selected time window.</p>
         </div>
         <table v-else class="table w-full mb-3">
             <thead>
@@ -87,16 +100,36 @@
 <script>
 import ContentCard from './ContentCard.vue'
 import { sessionsAPI } from '@/services/automationserver'
+import { useTableStateStore } from '@/stores/tableStateStore'
 
 export default {
     name: 'ProcessActivitySummary',
     components: {
         ContentCard
     },
+    setup() {
+        const tableStateStore = useTableStateStore()
+        return { tableStateStore }
+    },
     data() {
         return {
             items: [],
             refreshInterval: null
+        }
+    },
+    computed: {
+        selectedHours: {
+            get() {
+                return this.tableStateStore.getOption('processActivity', 'hours', 24)
+            },
+            set(value) {
+                this.tableStateStore.setOption('processActivity', 'hours', value)
+            }
+        }
+    },
+    watch: {
+        selectedHours() {
+            this.fetchData()
         }
     },
     async created() {
@@ -108,7 +141,7 @@ export default {
     },
     methods: {
         async fetchData() {
-            this.items = await sessionsAPI.getProcessActivitySummary()
+            this.items = await sessionsAPI.getProcessActivitySummary(this.selectedHours)
         },
         startAutoRefresh() {
             this.refreshInterval = setInterval(async () => {

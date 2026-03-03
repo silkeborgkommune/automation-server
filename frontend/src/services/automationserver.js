@@ -296,9 +296,9 @@ const sessionsAPI = {
       throw new Error(`Error fetching new sessions: ${error}`)
     }
   },
-  getProcessActivitySummary: async () => {
+  getProcessActivitySummary: async (hours = 24) => {
     try {
-      const response = await axios.get(`/sessions/activity-summary`)
+      const response = await axios.get(`/sessions/activity-summary`, { params: { hours } })
       return response.data
     } catch (error) {
       throw new Error(`Error fetching process activity summary: ${error}`)

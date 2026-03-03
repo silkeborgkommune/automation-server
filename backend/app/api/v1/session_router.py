@@ -81,10 +81,11 @@ def get_new_sessions(
 
 @router.get("/activity-summary", responses=error_descriptions("Session", _403=True))
 def get_activity_summary(
+    hours: int = 24,
     uow: AbstractUnitOfWork = Depends(get_unit_of_work),
     token: AccessToken = Depends(resolve_access_token),
 ) -> list[ProcessActivitySummary]:
-    since = datetime.now() - timedelta(hours=24)
+    since = datetime.now() - timedelta(hours=hours)
     with uow:
         return uow.sessions.get_process_activity_summary(since)
 
