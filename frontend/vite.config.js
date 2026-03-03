@@ -13,6 +13,9 @@ export default defineConfig({
     }
   },
   server: {
+    watch: {
+      usePolling: true,
+    },
     proxy: {
       // string shorthand: http://localhost:5173/foo -> http://localhost:4567/foo
       '/api': process.env.VITE_DEV_API_URL || 'http://localhost:8000'
