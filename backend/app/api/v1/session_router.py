@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
@@ -12,6 +12,7 @@ import app.enums as enums
 from .schemas import (
     SessionCreate,
     SessionStatusUpdate,
+    ProcessActivitySummary,
 )
 
 from app.api.v1.schemas import PaginatedResponse, PaginatedSearchParams
@@ -76,6 +77,16 @@ def get_new_sessions(
     token: AccessToken = Depends(resolve_access_token),
 ) -> list[Session]:
     return uow.sessions.get_new_sessions()
+
+
+@router.get("/activity-summary", responses=error_descriptions("Session", _403=True))
+def get_activity_summary(
+    uow: AbstractUnitOfWork = Depends(get_unit_of_work),
+    token: AccessToken = Depends(resolve_access_token),
+) -> list[ProcessActivitySummary]:
+    since = datetime.now() - timedelta(hours=24)
+    with uow:
+        return uow.sessions.get_process_activity_summary(since)
 
 
 @router.get(

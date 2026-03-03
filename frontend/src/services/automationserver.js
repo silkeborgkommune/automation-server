@@ -295,6 +295,14 @@ const sessionsAPI = {
     } catch (error) {
       throw new Error(`Error fetching new sessions: ${error}`)
     }
+  },
+  getProcessActivitySummary: async () => {
+    try {
+      const response = await axios.get(`/sessions/activity-summary`)
+      return response.data
+    } catch (error) {
+      throw new Error(`Error fetching process activity summary: ${error}`)
+    }
   }
 }
 

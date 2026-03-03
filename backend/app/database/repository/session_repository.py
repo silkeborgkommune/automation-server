@@ -1,6 +1,7 @@
+from datetime import datetime
 from typing import List, Optional
 
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, case
 from sqlalchemy.types import String
 from sqlmodel import Session as SqlSession, cast, select, or_
 
@@ -30,6 +31,9 @@ class AbstractSessionRepository(AbstractRepository[Session]):
         limit: int = 10,
         include_deleted: bool = False,
     ) -> tuple[List[Session], int]:
+        raise NotImplementedError
+
+    def get_process_activity_summary(self, since: datetime) -> list[dict]:
         raise NotImplementedError
 
 
@@ -112,6 +116,42 @@ class SessionRepository(AbstractSessionRepository, DatabaseRepository[Session]):
         self.session.commit()
 
         return log_entry
+
+    def get_process_activity_summary(self, since: datetime) -> list[dict]:
+        rows = self.session.exec(
+            select(
+                Session.process_id,
+                Process.name,
+                func.count(case((Session.status == enums.SessionStatus.COMPLETED, 1))).label("completed"),
+                func.count(case((Session.status == enums.SessionStatus.FAILED, 1))).label("failed"),
+                func.count(case((Session.status == enums.SessionStatus.IN_PROGRESS, 1))).label("in_progress"),
+                func.count(case((Session.status == enums.SessionStatus.NEW, 1))).label("new"),
+                func.max(Session.created_at).label("last_activity"),
+            )
+            .join(Process, Session.process_id == Process.id)
+            .where(Session.deleted == False)  # noqa: E712
+            .where(
+                or_(
+                    Session.created_at >= since,
+                    Session.status.in_([enums.SessionStatus.NEW, enums.SessionStatus.IN_PROGRESS]),
+                )
+            )
+            .group_by(Session.process_id, Process.name)
+            .order_by(func.max(Session.created_at).desc())
+        ).all()
+
+        return [
+            {
+                "process_id": process_id,
+                "process_name": name,
+                "completed": completed,
+                "failed": failed,
+                "in_progress": in_progress,
+                "new": new,
+                "last_activity": last_activity,
+            }
+            for process_id, name, completed, failed, in_progress, new, last_activity in rows
+        ]
 
     def get_paginated(
         self,

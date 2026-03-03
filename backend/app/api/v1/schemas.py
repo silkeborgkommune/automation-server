@@ -31,6 +31,15 @@ class WorkqueueInformation(BaseModel):
     completed: int
     failed: int
     pending_user_action: int
+
+class ProcessActivitySummary(BaseModel):
+    process_id: int
+    process_name: str
+    completed: int
+    failed: int
+    in_progress: int
+    new: int
+    last_activity: datetime
     
 class WorkItemCreate(BaseModel):
     data: Dict = {}

@@ -7,19 +7,19 @@
     <div class="mb-4">
       <up-next-display></up-next-display>
     </div>
-    <sessions-list :size="10"></sessions-list>
+    <process-activity-summary></process-activity-summary>
   </div>
 </template>
 <script>
 import ClusterMonitor from '@/components/ClusterMonitor.vue'
-import SessionsList from '@/components/SessionsList.vue'
+import ProcessActivitySummary from '@/components/ProcessActivitySummary.vue'
 import UpNextDisplay from '@/components/UpNextDisplay.vue'
 import IncidentsList from '@/components/IncidentsList.vue'
 
 export default {
   components: {
     ClusterMonitor,
-    SessionsList,
+    ProcessActivitySummary,
     UpNextDisplay,
     IncidentsList
   }
