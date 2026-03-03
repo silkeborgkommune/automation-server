@@ -97,6 +97,11 @@ const routes = [
     name: 'sessions.container',
     children: [
       {
+        path: '',
+        name: 'sessions',
+        component: () => import('../views/SessionsView.vue')
+      },
+      {
         path: ':id',
         name: 'session.edit',
         component: () => import('../views/EditSessionView.vue')

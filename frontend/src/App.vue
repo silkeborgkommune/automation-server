@@ -16,6 +16,8 @@
       <nav class="mt-6">
         <router-link class="block py-2.5 px-4 rounded hover:bg-white/10" to="/" active-class="bg-white/15"
           exact-active-class="bg-white/15">Home</router-link>
+        <router-link class="block py-2.5 px-4 rounded hover:bg-white/10" to="/sessions"
+          active-class="bg-white/15">Sessions</router-link>
         <router-link class="block py-2.5 px-4 rounded hover:bg-white/10" to="/process"
           active-class="bg-white/15">Processes</router-link>
         <router-link class="block py-2.5 px-4 rounded hover:bg-white/10" to="/workqueues"
