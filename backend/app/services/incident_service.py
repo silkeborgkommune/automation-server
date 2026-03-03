@@ -33,7 +33,7 @@ class IncidentService:
         if existing is not None:
             return existing
 
-        logs = self.auditlog_repository.get_recent_logs_by_session_id(session.id)
+        logs = list(reversed(self.auditlog_repository.get_recent_logs_by_session_id(session.id)))
         error_trace = [
             {
                 "message": log.message,
