@@ -20,37 +20,64 @@
                     :key="item.process_id"
                     class="hover:bg-base-300"
                 >
-                    <td>
+                    <td class="p-0">
                         <router-link
                             :to="{ name: 'process.edit', params: { id: item.process_id } }"
-                            class="link link-hover"
+                            class="block px-4 py-3 no-underline text-inherit"
                         >
                             {{ item.process_name }}
                         </router-link>
                     </td>
-                    <td class="text-center">
-                        <span :class="item.completed > 0 ? 'text-success font-semibold' : 'opacity-40'">
-                            {{ item.completed }}
-                        </span>
+                    <td class="text-center p-0">
+                        <router-link
+                            :to="{ name: 'sessions', query: { search: item.process_name } }"
+                            class="block px-4 py-3 no-underline text-inherit"
+                        >
+                            <span :class="item.completed > 0 ? 'text-success font-semibold' : 'opacity-40'">
+                                {{ item.completed }}
+                            </span>
+                        </router-link>
                     </td>
-                    <td class="text-center">
-                        <span :class="item.failed > 0 ? 'text-error font-semibold' : 'opacity-40'">
-                            {{ item.failed }}
-                        </span>
+                    <td class="text-center p-0">
+                        <router-link
+                            :to="{ name: 'sessions', query: { search: item.process_name } }"
+                            class="block px-4 py-3 no-underline text-inherit"
+                        >
+                            <span :class="item.failed > 0 ? 'text-error font-semibold' : 'opacity-40'">
+                                {{ item.failed }}
+                            </span>
+                        </router-link>
                     </td>
-                    <td class="text-center">
-                        <span v-if="item.in_progress > 0" class="text-warning font-semibold">
-                            <font-awesome-icon :icon="['fas', 'spinner']" spin />
-                            {{ item.in_progress }}
-                        </span>
-                        <span v-else class="opacity-40">0</span>
+                    <td class="text-center p-0">
+                        <router-link
+                            :to="{ name: 'sessions', query: { search: item.process_name } }"
+                            class="block px-4 py-3 no-underline text-inherit"
+                        >
+                            <span v-if="item.in_progress > 0" class="text-warning font-semibold">
+                                <font-awesome-icon :icon="['fas', 'spinner']" spin />
+                                {{ item.in_progress }}
+                            </span>
+                            <span v-else class="opacity-40">0</span>
+                        </router-link>
                     </td>
-                    <td class="text-center">
-                        <span :class="item.new > 0 ? 'text-info font-semibold' : 'opacity-40'">
-                            {{ item.new }}
-                        </span>
+                    <td class="text-center p-0">
+                        <router-link
+                            :to="{ name: 'sessions', query: { search: item.process_name } }"
+                            class="block px-4 py-3 no-underline text-inherit"
+                        >
+                            <span :class="item.new > 0 ? 'text-info font-semibold' : 'opacity-40'">
+                                {{ item.new }}
+                            </span>
+                        </router-link>
                     </td>
-                    <td class="text-center">{{ $formatDateTime(item.last_activity) }}</td>
+                    <td class="text-center p-0">
+                        <router-link
+                            :to="{ name: 'sessions', query: { search: item.process_name } }"
+                            class="block px-4 py-3 no-underline text-inherit"
+                        >
+                            {{ $formatDateTime(item.last_activity) }}
+                        </router-link>
+                    </td>
                 </tr>
             </tbody>
         </table>
