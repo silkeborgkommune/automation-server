@@ -51,9 +51,19 @@ npm run format           # Format code with Prettier
 
 ### Docker Development
 ```bash
-docker-compose up --build  # Start all services
-docker-compose down       # Stop all services
+docker compose up --build        # Start all services (auto-applies override)
+docker compose --profile tools up  # Include optional dev tools (Adminer)
+docker compose down              # Stop all services
 ```
+
+For production:
+```bash
+docker compose -f docker-compose.yml up -d  # Production only (no override)
+```
+
+File structure:
+- `docker-compose.yml` — production base (GHCR images, no defaults)
+- `docker-compose.override.yml` — development overrides (auto-applied by `docker compose up`)
 
 ## Database Operations
 

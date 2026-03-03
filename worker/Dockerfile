@@ -39,8 +39,8 @@ COPY --chown=worker:worker . .
 FROM base AS worker
 
 # Add health check - verify main.py process is running
-HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
-    CMD pgrep -f "main.py" || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD python3 -c "import os, time; s=os.stat('/tmp/worker.health'); exit(0 if time.time()-s.st_mtime < 300 else 1)"
 
 # Add metadata labels
 LABEL maintainer="miwn@odense.dk" \
@@ -93,8 +93,8 @@ RUN mkdir -p /playwright && \
 USER worker
 
 # Add health check - verify main.py process is running
-HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
-    CMD pgrep -f "main.py" || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD python3 -c "import os, time; s=os.stat('/tmp/worker.health'); exit(0 if time.time()-s.st_mtime < 300 else 1)"
 
 # Add metadata labels
 LABEL maintainer="miwn@odense.dk" \

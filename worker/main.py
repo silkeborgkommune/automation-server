@@ -1,10 +1,13 @@
 import logging
+import pathlib
 import socket
 import time
 import platform
 import os
 import threading
 from requests.exceptions import ConnectionError
+
+HEALTH_FILE = pathlib.Path("/tmp/worker.health")
 
 from automationclient import (
     resources,
@@ -29,6 +32,7 @@ def ping_resource(resource_id: int) -> None:
     while not stop_ping_thread.is_set():
         try:
             resources.ping_resource(resource_id)
+            HEALTH_FILE.touch()
             time.sleep(120)
         except ConnectionError:
             logger.error(f"Failed to ping resource {resource_id}, reconnecting in 5 seconds")
@@ -56,6 +60,7 @@ if __name__ == "__main__":
                             resource_id=resource["id"]
                         ) as session:
                             if session is None:
+                                HEALTH_FILE.touch()
                                 time.sleep(10)
                                 continue
 
