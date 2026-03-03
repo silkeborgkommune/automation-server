@@ -426,6 +426,51 @@ const accessTokensApi = {
   }
 }
 
+const incidentsAPI = {
+  getIncidents: async (page = 1, size = 20, search = '') => {
+    try {
+      const response = await axios.get(`/incidents`, {
+        params: { page, size, search }
+      })
+      return response.data
+    } catch (error) {
+      throw new Error(`Error fetching incidents: ${error}`)
+    }
+  },
+  getOpenIncidents: async () => {
+    try {
+      const response = await axios.get(`/incidents/open`)
+      return response.data
+    } catch (error) {
+      throw new Error(`Error fetching open incidents: ${error}`)
+    }
+  },
+  getIncident: async (id) => {
+    try {
+      const response = await axios.get(`/incidents/${id}`)
+      return response.data
+    } catch (error) {
+      throw new Error(`Error reading incident: ${error}`)
+    }
+  },
+  resolveIncident: async (id, status, resolution_note) => {
+    try {
+      const response = await axios.put(`/incidents/${id}/resolve`, { status, resolution_note })
+      return response.data
+    } catch (error) {
+      throw new Error(`Error resolving incident: ${error}`)
+    }
+  },
+  deleteIncident: async (id) => {
+    try {
+      const response = await axios.delete(`/incidents/${id}`)
+      return response.data
+    } catch (error) {
+      throw new Error(`Error deleting incident: ${error}`)
+    }
+  }
+}
+
 // Export APIs for use in Vue components or elsewhere
 export {
   processesAPI,
@@ -436,5 +481,6 @@ export {
   auditLogsAPI,
   triggersAPI,
   workitemsApi,
-  accessTokensApi
+  accessTokensApi,
+  incidentsAPI
 }

@@ -4,6 +4,9 @@
     <div class="mb-4">
       <up-next-display></up-next-display>
     </div>
+    <div class="mb-4">
+      <incidents-list :size="5"></incidents-list>
+    </div>
     <sessions-list :size="10"></sessions-list>
   </div>
 </template>
@@ -11,12 +14,14 @@
 import ClusterMonitor from '@/components/ClusterMonitor.vue'
 import SessionsList from '@/components/SessionsList.vue'
 import UpNextDisplay from '@/components/UpNextDisplay.vue'
+import IncidentsList from '@/components/IncidentsList.vue'
 
 export default {
   components: {
     ClusterMonitor,
     SessionsList,
-    UpNextDisplay
+    UpNextDisplay,
+    IncidentsList
   }
 }
 </script>
