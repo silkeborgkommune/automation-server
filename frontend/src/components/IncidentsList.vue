@@ -221,7 +221,7 @@ export default {
         startAutoRefresh() {
             this.refreshInterval = setInterval(async () => {
                 await Promise.all([this.fetchIncidents(), this.fetchOpenCount()])
-            }, 60000)
+            }, 15000)
         },
         stopAutoRefresh() {
             clearInterval(this.refreshInterval)

@@ -2,10 +2,10 @@
   <div>
     <cluster-monitor></cluster-monitor>
     <div class="mb-4">
-      <up-next-display></up-next-display>
+      <incidents-list :size="5"></incidents-list>
     </div>
     <div class="mb-4">
-      <incidents-list :size="5"></incidents-list>
+      <up-next-display></up-next-display>
     </div>
     <sessions-list :size="10"></sessions-list>
   </div>
