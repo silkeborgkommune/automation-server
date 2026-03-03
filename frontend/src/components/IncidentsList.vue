@@ -1,8 +1,10 @@
 <template>
     <content-card title="Incidents">
         <template v-slot:header-right>
-            <span v-if="openCount > 0" class="badge badge-error badge-sm mr-2">{{ openCount }} open</span>
-            <search-input v-model="searchTerm" placeholder="Search incidents..." />
+            <div class="flex items-center">
+                <span v-if="openCount > 0" class="badge badge-error badge-sm mr-2">{{ openCount }} open</span>
+                <search-input v-model="searchTerm" placeholder="Search incidents..." />
+            </div>
         </template>
         <div v-if="incidents.length === 0" class="text-center mb-4">
             <p class="secondary-content font-semibold">{{ searchTerm ? 'No incidents found matching search.' : 'No incidents — all good!' }}</p>
@@ -26,8 +28,8 @@
                         >
                             <td class="text-center p-2">
                                 <font-awesome-icon
-                                    :icon="['fas', 'caret-down']"
-                                    :class="['transition-transform duration-200', { 'rotate-180': expandedId === incident.id }]"
+                                    :icon="['fas', 'caret-right']"
+                                    :class="['transition-transform duration-200', { 'rotate-90': expandedId === incident.id }]"
                                 />
                             </td>
                             <td class="text-center">{{ incident.id }}</td>
@@ -35,7 +37,7 @@
                                 <process-label :process-id="incident.process_id" />
                             </td>
                             <td class="text-center">
-                                <font-awesome-icon v-if="incident.status === 'new'" :icon="['fas', 'circle']" class="text-error" :title="incident.status" />
+                                <font-awesome-icon v-if="incident.status === 'new'" :icon="['fas', 'triangle-exclamation']" class="text-error" :title="incident.status" />
                                 <font-awesome-icon v-else-if="incident.status === 'dismissed'" :icon="['fas', 'check']" class="text-warning" :title="incident.status" />
                                 <font-awesome-icon v-else-if="incident.status === 'rescheduled'" :icon="['fas', 'redo']" class="text-success" :title="incident.status" />
                             </td>
@@ -96,6 +98,10 @@
                                         <p v-else class="text-sm text-base-content/50">No error trace.</p>
                                     </div>
                                 </div>
+                                <div v-if="incident.status === 'new'" class="flex justify-end gap-2 mt-4">
+                                    <button class="btn btn-sm btn-warning" @click.stop="resolveIncident(incident.id, 'dismissed')">Dismiss</button>
+                                    <button class="btn btn-sm btn-success" @click.stop="resolveIncident(incident.id, 'rescheduled')">Reschedule</button>
+                                </div>
                             </td>
                         </tr>
                     </template>
@@ -117,6 +123,7 @@ import ProcessLabel from '@/components/ProcessLabel.vue'
 import SearchInput from '@/components/SearchInput.vue'
 import { incidentsAPI } from '@/services/automationserver'
 import { useTableStateStore } from '../stores/tableStateStore'
+import { useAlertStore } from '@/stores/alertStore'
 
 export default {
     name: 'IncidentsList',
@@ -128,7 +135,8 @@ export default {
     },
     setup() {
         const tableStateStore = useTableStateStore()
-        return { tableStateStore }
+        const alertStore = useAlertStore()
+        return { tableStateStore, alertStore }
     },
     props: {
         size: {
@@ -181,7 +189,7 @@ export default {
     },
     methods: {
         async fetchIncidents() {
-            const response = await incidentsAPI.getIncidents(this.page, this.size, this.searchTerm)
+            const response = await incidentsAPI.getIncidents(this.page, this.size, this.searchTerm, 'new')
             this.incidents = response.items || []
             this.totalPages = response.total_pages || 1
             if (this.page > this.totalPages && this.totalPages > 0) {
@@ -199,6 +207,16 @@ export default {
         handlePageChange(newPage) {
             this.page = newPage
             this.fetchIncidents()
+        },
+        async resolveIncident(id, status) {
+            try {
+                await incidentsAPI.resolveIncident(id, status)
+                this.alertStore.addAlert({ type: 'success', message: `Incident ${status}.` })
+                this.expandedId = null
+                await Promise.all([this.fetchIncidents(), this.fetchOpenCount()])
+            } catch (error) {
+                this.alertStore.addAlert({ type: 'error', message: error })
+            }
         },
         startAutoRefresh() {
             this.refreshInterval = setInterval(async () => {

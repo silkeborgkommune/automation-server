@@ -427,10 +427,10 @@ const accessTokensApi = {
 }
 
 const incidentsAPI = {
-  getIncidents: async (page = 1, size = 20, search = '') => {
+  getIncidents: async (page = 1, size = 20, search = '', status = null) => {
     try {
       const response = await axios.get(`/incidents`, {
-        params: { page, size, search }
+        params: { page, size, search, ...(status && { status }) }
       })
       return response.data
     } catch (error) {
