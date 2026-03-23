@@ -1,5 +1,6 @@
 from typing import List, Optional
 
+from sqlalchemy import update
 from sqlalchemy.sql import func
 from sqlalchemy.types import String
 from sqlmodel import Session, cast, select, or_
@@ -18,6 +19,9 @@ class AbstractIncidentRepository(AbstractRepository[Incident]):
         raise NotImplementedError
 
     def count_open_incidents(self) -> int:
+        raise NotImplementedError
+
+    def dismiss_all_open(self) -> int:
         raise NotImplementedError
 
     def get_paginated(
@@ -55,6 +59,16 @@ class IncidentRepository(AbstractIncidentRepository, DatabaseRepository[Incident
             .where(Incident.deleted == False)  # noqa: E712
         ).first()
         return result or 0
+
+    def dismiss_all_open(self) -> int:
+        result = self.session.execute(
+            update(Incident)
+            .where(Incident.status == enums.IncidentStatus.NEW)
+            .where(Incident.deleted == False)  # noqa: E712
+            .values(status=enums.IncidentStatus.DISMISSED)
+        )
+        self.session.commit()
+        return result.rowcount
 
     def get_paginated(
         self,

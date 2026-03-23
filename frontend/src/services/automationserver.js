@@ -461,6 +461,14 @@ const incidentsAPI = {
       throw new Error(`Error fetching open incident count: ${error}`)
     }
   },
+  dismissAllIncidents: async () => {
+    try {
+      const response = await axios.post(`/incidents/dismiss-all`)
+      return response.data.dismissed
+    } catch (error) {
+      throw new Error(`Error dismissing all incidents: ${error}`)
+    }
+  },
   getIncident: async (id) => {
     try {
       const response = await axios.get(`/incidents/${id}`)
