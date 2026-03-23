@@ -3,6 +3,7 @@ import os
 import tempfile
 import logging
 import sys
+import fcntl
 
 from pathlib import Path
 from typing import Optional, Tuple, Dict, List
@@ -117,6 +118,18 @@ def run_python(
             logging.warning(
                 "No requirements.txt or pyproject.toml found. Skipping dependency installation."
             )
+
+        # Install Playwright browsers if playwright is installed in the venv
+        playwright_bin = venv_path / ("Scripts/playwright.exe" if sys.platform == "win32" else "bin/playwright")
+        if playwright_bin.exists():
+            logging.info("Playwright detected — installing browsers...")
+            lock_path = Path(os.environ.get("PLAYWRIGHT_BROWSERS_PATH", "/tmp")) / ".install.lock"
+            with open(lock_path, "w") as lock_file:
+                fcntl.flock(lock_file, fcntl.LOCK_EX)
+                try:
+                    run_command(f"{playwright_bin} install chromium", cwd=temp_path)
+                finally:
+                    fcntl.flock(lock_file, fcntl.LOCK_UN)
 
         # Run the main.py script
         main_script = temp_path / "main.py"

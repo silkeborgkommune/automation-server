@@ -1,9 +1,12 @@
 <template>
     <content-card title="Incidents">
         <template v-slot:header-right>
-            <div class="flex items-center">
-                <span v-if="openCount > 0" class="badge badge-error badge-sm mr-2">{{ openCount }} open</span>
+            <div class="flex items-center gap-2">
+                <span v-if="openCount > 0" class="badge badge-error">{{ openCount }} open</span>
                 <search-input v-model="searchTerm" placeholder="Search incidents..." />
+                <button v-if="openCount > 0" class="btn btn-sm flex items-center space-x-2" @click="dismissAll">
+                    <font-awesome-icon :icon="['fas', 'broom']" />Dismiss all
+                </button>
             </div>
         </template>
         <div v-if="incidents.length === 0" class="text-center mb-4">
@@ -23,7 +26,7 @@
                 <tbody>
                     <template v-for="incident in incidents" :key="incident.id">
                         <tr
-                            :class="['hover:bg-base-300 cursor-pointer', { 'bg-error/30': incident.status === 'new' }]"
+                            class="hover:bg-base-300 cursor-pointer"
                             @click="toggleExpand(incident.id)"
                         >
                             <td class="text-center p-2">
@@ -198,8 +201,7 @@ export default {
             }
         },
         async fetchOpenCount() {
-            const open = await incidentsAPI.getOpenIncidents()
-            this.openCount = open.length
+            this.openCount = await incidentsAPI.getOpenIncidentCount()
         },
         toggleExpand(id) {
             this.expandedId = this.expandedId === id ? null : id
@@ -207,6 +209,18 @@ export default {
         handlePageChange(newPage) {
             this.page = newPage
             this.fetchIncidents()
+        },
+        async dismissAll() {
+            const confirmed = confirm(`Dismiss all ${this.openCount} open incidents? This cannot be undone.`)
+            if (!confirmed) return
+            try {
+                const count = await incidentsAPI.dismissAllIncidents()
+                this.alertStore.addAlert({ type: 'success', message: `${count} incidents dismissed.` })
+                this.expandedId = null
+                await Promise.all([this.fetchIncidents(), this.fetchOpenCount()])
+            } catch (error) {
+                this.alertStore.addAlert({ type: 'error', message: error })
+            }
         },
         async resolveIncident(id, status) {
             try {

@@ -113,6 +113,10 @@ class IncidentService:
 
         return self.repository.update(incident, update_data)
 
+    def dismiss_all_open(self) -> int:
+        """Dismiss all open (NEW) incidents. Returns the count dismissed."""
+        return self.repository.dismiss_all_open()
+
     def search_incidents(
         self,
         page: int = 1,

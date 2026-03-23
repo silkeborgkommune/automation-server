@@ -19,12 +19,12 @@
 
     <div>
       <!-- Table -->
-      <table class="table w-full table-auto mb-3 rounded-b-lg">
+      <table class="table w-full table-fixed mb-3 rounded-b-lg">
         <thead>
           <tr>
             <th class="text-center">Id</th>
-            <th>Reference</th>
-            <th>Message</th>
+            <th class="w-1/4">Reference</th>
+            <th class="w-1/4">Message</th>
             <th>Data</th>
             <th class="text-center">Status</th>
             <th class="text-center">Created</th>

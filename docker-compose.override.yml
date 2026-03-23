@@ -2,12 +2,15 @@
 # For production, use: docker compose -f docker-compose.yml up -d
 
 x-worker-dev: &worker-dev-template
+  image: ats-worker-dev
   build:
     context: ./worker
     dockerfile: Dockerfile
-    target: worker-playwright
-  environment:
-    ATS_CAPABILITIES: playwright
+    target: worker
+#  environment:
+#    ATS_CAPABILITIES: playwright
+  volumes:
+    - playwright-browsers:/playwright
 
 services:
   db:
@@ -52,9 +55,6 @@ services:
     environment:
       VITE_ATS_API_BASE_URL: /api
 
-  proxy:
-    ports:
-      - "80:80"
 
   worker01:
     <<: *worker-dev-template
@@ -79,3 +79,4 @@ services:
 
 volumes:
   frontend_node_modules:
+  playwright-browsers:
