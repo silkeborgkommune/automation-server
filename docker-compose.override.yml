@@ -9,6 +9,8 @@ x-worker-dev: &worker-dev-template
     target: worker-playwright
   environment:
     ATS_CAPABILITIES: playwright
+  volumes:
+    - playwright-browsers:/playwright
 
 services:
   db:
@@ -80,3 +82,4 @@ services:
 
 volumes:
   frontend_node_modules:
+  playwright-browsers:

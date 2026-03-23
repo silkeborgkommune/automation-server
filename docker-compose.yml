@@ -74,10 +74,14 @@ services:
   worker01:
     <<: *worker-template
     hostname: worker-01
+    volumes:
+      - playwright-browsers:/playwright
 
   worker02:
     <<: *worker-template
     hostname: worker-02
+    volumes:
+      - playwright-browsers:/playwright
 
 networks:
   app-network:
@@ -85,3 +89,4 @@ networks:
 
 volumes:
   db-data:
+  playwright-browsers:
