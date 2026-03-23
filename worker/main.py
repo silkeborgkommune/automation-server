@@ -21,7 +21,7 @@ from runners import python
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-capabilities = f"python {platform.system()} {os.getenv('ATS_CAPABILITIES') or ""}".lower().strip()
+capabilities = f"python playwright {platform.system()} {os.getenv('ATS_CAPABILITIES') or ""}".lower().strip()
 
 stop_ping_thread = threading.Event()
 

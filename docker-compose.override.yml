@@ -6,9 +6,9 @@ x-worker-dev: &worker-dev-template
   build:
     context: ./worker
     dockerfile: Dockerfile
-    target: worker-playwright
-  environment:
-    ATS_CAPABILITIES: playwright
+    target: worker
+#  environment:
+#    ATS_CAPABILITIES: playwright
   volumes:
     - playwright-browsers:/playwright
 
