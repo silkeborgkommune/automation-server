@@ -17,6 +17,9 @@ class AbstractIncidentRepository(AbstractRepository[Incident]):
     def get_open_incidents(self) -> List[Incident]:
         raise NotImplementedError
 
+    def count_open_incidents(self) -> int:
+        raise NotImplementedError
+
     def get_paginated(
         self,
         search: Optional[str] = None,
@@ -43,6 +46,15 @@ class IncidentRepository(AbstractIncidentRepository, DatabaseRepository[Incident
             .where(Incident.deleted == False)  # noqa: E712
             .order_by(Incident.created_at.desc())
         ).all())
+
+    def count_open_incidents(self) -> int:
+        result = self.session.exec(
+            select(func.count())
+            .select_from(Incident)
+            .where(Incident.status == enums.IncidentStatus.NEW)
+            .where(Incident.deleted == False)  # noqa: E712
+        ).first()
+        return result or 0
 
     def get_paginated(
         self,

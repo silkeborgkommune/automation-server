@@ -55,6 +55,15 @@ def list_open_incidents(
         return uow.incidents.get_open_incidents()
 
 
+@router.get("/open/count", responses=error_descriptions("Incident", _403=True))
+def count_open_incidents(
+    uow: AbstractUnitOfWork = Depends(get_unit_of_work),
+    token: AccessToken = Depends(resolve_access_token),
+) -> dict:
+    with uow:
+        return {"count": uow.incidents.count_open_incidents()}
+
+
 @router.get(
     "/{incident_id}",
     responses=error_descriptions("Incident", _403=True, _404=True, _410=True),

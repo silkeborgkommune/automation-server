@@ -2,6 +2,7 @@
 # For production, use: docker compose -f docker-compose.yml up -d
 
 x-worker-dev: &worker-dev-template
+  image: ats-worker-dev
   build:
     context: ./worker
     dockerfile: Dockerfile

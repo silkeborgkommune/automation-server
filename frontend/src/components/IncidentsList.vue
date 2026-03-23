@@ -198,8 +198,7 @@ export default {
             }
         },
         async fetchOpenCount() {
-            const open = await incidentsAPI.getOpenIncidents()
-            this.openCount = open.length
+            this.openCount = await incidentsAPI.getOpenIncidentCount()
         },
         toggleExpand(id) {
             this.expandedId = this.expandedId === id ? null : id

@@ -453,6 +453,14 @@ const incidentsAPI = {
       throw new Error(`Error fetching open incidents: ${error}`)
     }
   },
+  getOpenIncidentCount: async () => {
+    try {
+      const response = await axios.get(`/incidents/open/count`)
+      return response.data.count
+    } catch (error) {
+      throw new Error(`Error fetching open incident count: ${error}`)
+    }
+  },
   getIncident: async (id) => {
     try {
       const response = await axios.get(`/incidents/${id}`)
