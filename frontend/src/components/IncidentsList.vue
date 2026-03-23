@@ -26,7 +26,7 @@
                 <tbody>
                     <template v-for="incident in incidents" :key="incident.id">
                         <tr
-                            :class="['hover:bg-base-300 cursor-pointer', { 'bg-error/30': incident.status === 'new' }]"
+                            class="hover:bg-base-300 cursor-pointer"
                             @click="toggleExpand(incident.id)"
                         >
                             <td class="text-center p-2">
