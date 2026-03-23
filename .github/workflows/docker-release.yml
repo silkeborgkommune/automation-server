@@ -21,9 +21,6 @@ jobs:
             target: ""
           - component: worker
             target: worker
-          - component: worker
-            target: worker-playwright
-            suffix: -playwright
 
     steps:
       - uses: actions/checkout@v4

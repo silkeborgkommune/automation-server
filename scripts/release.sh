@@ -124,7 +124,6 @@ git add \
   worker/Dockerfile \
   docker-compose.yml \
   worker/build-standard.sh \
-  worker/build-playwright.sh \
   README.md
 
 git commit -m "Release $TAG"

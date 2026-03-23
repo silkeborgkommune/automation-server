@@ -81,8 +81,6 @@ CHANGED_FILES+=("docker-compose.yml")
 sedi "s/:$CURRENT_VERSION/:$NEW_VERSION/g" "$REPO_ROOT/worker/build-standard.sh"
 CHANGED_FILES+=("worker/build-standard.sh")
 
-sedi "s/:$CURRENT_VERSION/:$NEW_VERSION/g" "$REPO_ROOT/worker/build-playwright.sh"
-CHANGED_FILES+=("worker/build-playwright.sh")
 
 # ── README.md badge ───────────────────────────────────────────────────────────
 

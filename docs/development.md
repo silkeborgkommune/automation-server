@@ -41,7 +41,6 @@ docker-compose build
 
 # Or build individual components
 cd worker && ./build-standard.sh      # Standard worker
-cd worker && ./build-playwright.sh    # Playwright-enabled worker
 ```
 
 ### Production Considerations
