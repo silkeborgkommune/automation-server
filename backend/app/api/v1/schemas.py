@@ -51,6 +51,7 @@ class WorkItemUpdate(BaseModel):
 
 class WorkItemStatusUpdate(BaseModel):
     status: enums.WorkItemStatus
+    message: Optional[str] = None
 
 class WorkItemRead(BaseModel):
     id: int
