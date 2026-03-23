@@ -55,9 +55,6 @@ services:
     environment:
       VITE_ATS_API_BASE_URL: /api
 
-  proxy:
-    ports:
-      - "80:80"
 
   worker01:
     <<: *worker-dev-template
