@@ -2,6 +2,8 @@ import asyncio
 import logging
 from contextlib import asynccontextmanager
 
+from importlib.metadata import version as get_version
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -51,7 +53,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="Automation server",
     description="Automation server",
-    version="0.2.0",
+    version=get_version("automation_server_backend"),
     docs_url="/docs",
     openapi_url="/openapi.json",
     lifespan=lifespan,

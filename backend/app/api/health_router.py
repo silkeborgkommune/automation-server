@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from importlib.metadata import version as get_version
 from typing import Dict, Any
 
 from fastapi import APIRouter, Depends, status
@@ -11,6 +12,8 @@ router = APIRouter(
     tags=["health"],
 )
 
+APP_VERSION = get_version("automation_server_backend")
+
 
 @router.get("", response_model=Dict[str, Any])
 async def health_check() -> Dict[str, Any]:
@@ -18,7 +21,7 @@ async def health_check() -> Dict[str, Any]:
     return {
         "status": "healthy",
         "timestamp": datetime.now(timezone.utc).isoformat(),
-        "version": "0.2.0"
+        "version": APP_VERSION
     }
 
 
@@ -28,7 +31,7 @@ async def readiness_check(session: Session = Depends(get_session)) -> Dict[str, 
     response = {
         "status": "healthy",
         "timestamp": datetime.now(timezone.utc).isoformat(),
-        "version": "0.2.0",
+        "version": APP_VERSION,
         "database": "unknown"
     }
     
