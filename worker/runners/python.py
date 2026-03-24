@@ -88,7 +88,7 @@ def run_python(
         # Clone the repo
         logging.info(f"Cloning repository into {temp_path}...")
         try:
-            git.Repo.clone_from(repo_url, temp_path)
+            git.Repo.clone_from(repo_url, temp_path, multi_options=["--recurse-submodules"])
         except git.exc.GitCommandError as e:
             logging.error(f"Git clone failed: {e}")
             return None, None, 1

@@ -2,7 +2,7 @@ import asyncio
 import logging
 from contextlib import asynccontextmanager
 
-from importlib.metadata import version as get_version
+from importlib.metadata import PackageNotFoundError, version as get_version
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -27,6 +27,12 @@ from app.scheduler import scheduler_background_task
 logging.basicConfig(level=logging.INFO if settings.debug else logging.WARNING)
 
 logger = logging.getLogger(__name__)
+
+try:
+    APP_VERSION = get_version("automation_server_backend")
+except PackageNotFoundError:
+    APP_VERSION = "unknown"
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -53,7 +59,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="Automation server",
     description="Automation server",
-    version=get_version("automation_server_backend"),
+    version=APP_VERSION,
     docs_url="/docs",
     openapi_url="/openapi.json",
     lifespan=lifespan,

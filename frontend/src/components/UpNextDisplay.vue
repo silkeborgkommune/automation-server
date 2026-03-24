@@ -2,6 +2,14 @@
   <content-card title="Up Next">
     <template v-slot:header-right>
       <search-input v-model="searchTerm" placeholder="Search processes..." />
+      <select v-model="selectedHours" class="select select-sm select-bordered">
+        <option :value="1">Next 1h</option>
+        <option :value="3">Next 3h</option>
+        <option :value="12">Next 12h</option>
+        <option :value="24">Next 24h</option>
+        <option :value="48">Next 48h</option>
+        <option :value="72">Next 72h</option>
+      </select>
     </template>
 
     <!-- Loading state -->
@@ -19,7 +27,7 @@
     <!-- Empty state -->
     <div v-else-if="filteredExecutions.length === 0" class="text-center mb-4">
       <p class="secondary-content font-semibold">
-        {{ searchTerm ? 'No executions found matching your search.' : 'No executions scheduled for the next 24 hours.' }}
+        {{ searchTerm ? 'No executions found matching your search.' : `No executions scheduled for the next ${selectedHours} hours.` }}
       </p>
     </div>
 
@@ -77,6 +85,7 @@
 
 <script>
 import { triggersAPI } from '@/services/automationserver'
+import { useTableStateStore } from '@/stores/tableStateStore'
 import ContentCard from './ContentCard.vue'
 import SearchInput from './SearchInput.vue'
 
@@ -85,6 +94,9 @@ export default {
   components: {
     ContentCard,
     SearchInput
+  },
+  setup() {
+    return { tableStateStore: useTableStateStore() }
   },
   data() {
     return {
@@ -96,6 +108,14 @@ export default {
     }
   },
   computed: {
+    selectedHours: {
+      get() {
+        return this.tableStateStore.getOption('upNext', 'hours', 24)
+      },
+      set(value) {
+        this.tableStateStore.setOption('upNext', 'hours', value)
+      }
+    },
     filteredExecutions() {
       if (!this.searchTerm) return this.executions
 
@@ -105,6 +125,11 @@ export default {
         execution.process_description?.toLowerCase().includes(search) ||
         execution.trigger_type.toLowerCase().includes(search)
       )
+    }
+  },
+  watch: {
+    selectedHours() {
+      this.refreshExecutions()
     }
   },
   async created() {
@@ -122,7 +147,7 @@ export default {
       this.error = null
 
       try {
-        this.executions = await triggersAPI.getUpcomingExecutions()
+        this.executions = await triggersAPI.getUpcomingExecutions(this.selectedHours)
       } catch (err) {
         this.error = 'Failed to load upcoming executions'
         console.error('Error loading upcoming executions:', err)
