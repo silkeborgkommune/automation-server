@@ -8,16 +8,30 @@
       </option>
     </select>
 
-    <!-- Parameters Input (shown when process is selected) -->
+    <!-- Parameters Input with floating suggestions -->
     <transition name="parameter-expand">
-      <input
-        v-if="selected !== ''"
-        type="text"
-        class="input input-sm input-bordered join-item"
-        v-model="parameters"
-        placeholder="Parameters (optional)"
-        title="Commandline parameters to pass to the process"
-      />
+      <div v-if="selected !== ''" class="relative join-item">
+        <input
+          ref="parametersInput"
+          type="text"
+          class="input input-sm input-bordered w-full rounded-none"
+          v-model="parameters"
+          placeholder="Parameters (optional)"
+          title="Commandline parameters to pass to the process"
+          @keyup.enter="trigger()"
+          @focus="showSuggestions = true"
+          @blur="showSuggestions = false"
+        />
+        <ul v-if="showSuggestions && suggestions.length > 0"
+          class="absolute top-full left-0 z-50 w-full min-w-max bg-base-100 border border-base-300 shadow-lg rounded-box mt-1 py-1">
+          <li
+            v-for="suggestion in suggestions"
+            :key="suggestion"
+            class="px-4 py-2 text-sm cursor-pointer hover:bg-base-200 whitespace-nowrap"
+            @mousedown.prevent="applySuggestion(suggestion)"
+          >{{ suggestion }}</li>
+        </ul>
+      </div>
     </transition>
 
     <!-- Button -->
@@ -41,7 +55,9 @@ export default {
         return {
             processes: [],
             selected: "",
-            parameters: ""
+            parameters: "",
+            suggestions: [],
+            showSuggestions: false
         }
     },
     async created() {
@@ -50,12 +66,30 @@ export default {
              this.processes.sort((a, b) => a.name.localeCompare(b.name))
         }
     },
+    watch: {
+        async selected(val) {
+            if (val !== '') {
+                this.$nextTick(() => this.$refs.parametersInput?.focus())
+                try {
+                    const triggers = await processesAPI.getTriggers(val)
+                    this.suggestions = [...new Set(
+                        triggers.map(t => t.parameters).filter(p => p && p.trim() !== '')
+                    )]
+                } catch {
+                    this.suggestions = []
+                }
+            } else {
+                this.suggestions = []
+            }
+        }
+    },
     methods: {
         async trigger() {
             try {
                 await sessionsAPI.createSession(this.selected, this.parameters)
                 this.selected = ""
                 this.parameters = ""
+                this.suggestions = []
 
                 useAlertStore().addAlert({
                     type: 'success',
@@ -67,6 +101,9 @@ export default {
                     message: `Failed to trigger process: ${error.message}`
                 })
             }
+        },
+        applySuggestion(suggestion) {
+            this.parameters = suggestion
         }
     }
 }
