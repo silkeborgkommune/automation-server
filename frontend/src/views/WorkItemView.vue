@@ -3,6 +3,9 @@
         <content-card title="WorkItem" class="mb-3">
             <div class="Card-content">
                 <workitem-info :workitem="workItem"  />
+                <div class="flex justify-end space-x-2 mt-4">
+                    <router-link :to="{ name: 'workqueue.detail', params: { id: workItem.workqueue_id } }" class="btn">Back</router-link>
+                </div>
             </div>
         </content-card>
 
@@ -28,7 +31,6 @@
             </div>
         </ContentCard>
 
-        <router-link :to="{ name: 'workqueue.detail', params: { id: this.workItem.workqueue_id } }" class=""><font-awesome-icon :icon="['fas', 'fa-chevron-left']" /> Back</router-link>
 
     </div>
 </template>
