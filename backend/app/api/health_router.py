@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from importlib.metadata import version as get_version
+from importlib.metadata import PackageNotFoundError, version as get_version
 from typing import Dict, Any
 
 from fastapi import APIRouter, Depends, status
@@ -12,7 +12,10 @@ router = APIRouter(
     tags=["health"],
 )
 
-APP_VERSION = get_version("automation_server_backend")
+try:
+    APP_VERSION = get_version("automation_server_backend")
+except PackageNotFoundError:
+    APP_VERSION = "unknown"
 
 
 @router.get("", response_model=Dict[str, Any])
