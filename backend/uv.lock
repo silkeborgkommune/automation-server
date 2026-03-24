@@ -41,7 +41,7 @@ wheels = [
 [[package]]
 name = "automation-server-backend"
 version = "0.3.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "alembic" },
     { name = "cronsim" },

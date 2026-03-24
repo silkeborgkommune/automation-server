@@ -46,8 +46,8 @@ def get_workqueue(
         return workqueue
     
 def get_workqueue_by_name(
-    workqueue_name: str, 
-    uow: AbstractUnitOfWork = Depends(get_unit_of_work)    
+    workqueue_name: str,
+    uow: AbstractUnitOfWork = Depends(get_unit_of_work)
 ) -> Workqueue:
     with uow:
         workqueue = uow.workqueues.get_by_name(workqueue_name)

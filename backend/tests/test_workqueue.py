@@ -340,6 +340,34 @@ def test_get_workitems_by_reference_in_workqueue(session: Session, client: TestC
     assert len(data) == 0
 
 
+def test_get_workqueue_by_name(session: Session, client: TestClient):
+    generate_basic_data(session)
+
+    response = client.get("/workqueues/by_name/Workqueue")
+    assert response.status_code == 200
+
+    data = response.json()
+    assert data["name"] == "Workqueue"
+
+
+def test_get_workqueue_by_name_with_spaces(session: Session, client: TestClient):
+    generate_basic_data(session)
+
+    # Create a workqueue with spaces in the name
+    response = client.post(
+        "/workqueues/",
+        json={"name": "Client library test", "description": "Test queue", "enabled": True},
+    )
+    assert response.status_code == 200
+
+    # Look it up by name — %20 spaces must be decoded correctly
+    response = client.get("/workqueues/by_name/Client library test")
+    assert response.status_code == 200
+
+    data = response.json()
+    assert data["name"] == "Client library test"
+
+
 def test_get_workitems_by_reference_in_workqueue_with_status_filter(session: Session, client: TestClient):
     generate_basic_data(session)
 
