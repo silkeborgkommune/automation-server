@@ -28,7 +28,7 @@
             </div>
         </ContentCard>
 
-        <router-link :to="{ name: 'workqueue.edit' }" :params="{ id: this.workItem.workqueue_id}" class=""><font-awesome-icon :icon="['fas', 'fa-chevron-left']" /> Back</router-link>
+        <router-link :to="{ name: 'workqueue.detail', params: { id: this.workItem.workqueue_id } }" class=""><font-awesome-icon :icon="['fas', 'fa-chevron-left']" /> Back</router-link>
 
     </div>
 </template>

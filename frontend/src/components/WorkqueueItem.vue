@@ -1,34 +1,34 @@
 <template>
   <tr class="hover:bg-base-300">
     <td class="p-0">
-      <router-link :to="{ name: 'workqueue.edit', params: { id: workqueue.id } }"
+      <router-link :to="{ name: 'workqueue.detail', params: { id: workqueue.id } }"
         class="block px-4 py-3 no-underline text-inherit">{{ workqueue.name }}</router-link>
     </td>
     <td class="text-center p-0">
-      <router-link :to="{ name: 'workqueue.edit', params: { id: workqueue.id } }"
+      <router-link :to="{ name: 'workqueue.detail', params: { id: workqueue.id } }"
         class="block px-4 py-3 no-underline text-inherit">
         <font-awesome-icon :icon="['fas', 'circle-check']" v-if="workqueue.enabled" class="text-success" title="Enabled" />
         <font-awesome-icon :icon="['fas', 'xmark-circle']" v-else class="text-base-content/40" title="Disabled" />
       </router-link>
     </td>
     <td class="text-center p-0">
-      <router-link :to="{ name: 'workqueue.edit', params: { id: workqueue.id } }"
+      <router-link :to="{ name: 'workqueue.detail', params: { id: workqueue.id } }"
         class="block px-4 py-3 no-underline text-inherit">{{ workqueue.in_progress }}</router-link>
     </td>
     <td class="text-center p-0">
-      <router-link :to="{ name: 'workqueue.edit', params: { id: workqueue.id } }"
+      <router-link :to="{ name: 'workqueue.detail', params: { id: workqueue.id } }"
         class="block px-4 py-3 no-underline text-inherit">{{ workqueue.new }}</router-link>
     </td>
     <td class="text-center p-0">
-      <router-link :to="{ name: 'workqueue.edit', params: { id: workqueue.id } }"
+      <router-link :to="{ name: 'workqueue.detail', params: { id: workqueue.id } }"
         class="block px-4 py-3 no-underline text-inherit">{{ workqueue.pending_user_action }}</router-link>
     </td>
     <td class="text-center p-0">
-      <router-link :to="{ name: 'workqueue.edit', params: { id: workqueue.id } }"
+      <router-link :to="{ name: 'workqueue.detail', params: { id: workqueue.id } }"
         class="block px-4 py-3 no-underline text-inherit">{{ workqueue.completed }}</router-link>
     </td>
     <td class="text-center p-0">
-      <router-link :to="{ name: 'workqueue.edit', params: { id: workqueue.id } }"
+      <router-link :to="{ name: 'workqueue.detail', params: { id: workqueue.id } }"
         class="block px-4 py-3 no-underline text-inherit">{{ workqueue.failed }}</router-link>
     </td>
     <td class="text-center">
@@ -65,7 +65,7 @@ export default {
       if (action !== 'Details') {
         this.clearWorkQueueItems(action);
       }else{
-        this.$router.push({ name: 'workqueue.edit', params: { id: this.workqueue.id } })
+        this.$router.push({ name: 'workqueue.detail', params: { id: this.workqueue.id } })
       }
     },
     clearWorkQueueItems(action) {

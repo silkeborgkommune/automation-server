@@ -34,6 +34,11 @@ const routes = [
         component: () => import('../views/WorkqueuesView.vue')
       },
       {
+        path: ':id',
+        name: 'workqueue.detail',
+        component: () => import('../views/WorkqueueView.vue')
+      },
+      {
         path: ':id/edit',
         name: 'workqueue.edit',
         component: () => import('../views/EditWorkqueueView.vue')
