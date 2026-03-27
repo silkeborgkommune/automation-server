@@ -26,7 +26,8 @@ export default {
         target_source: '',
         target_credentials_id: null,
         credentials_id: null,
-        workqueue_id: null
+        workqueue_id: null,
+        requirements: 'python'
       }
     }
   },
