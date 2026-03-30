@@ -104,6 +104,7 @@
           id="requirements"
         />
         <small class="text-base-content/60 block mt-1">Space separated list of required features</small>
+        <small class="text-warning block mt-1" v-if="!editedProcess.requirements">Process will not be scheduled without requirements</small>
       </div>
     </div>
 
@@ -151,13 +152,17 @@ export default {
     }
   },
 
-  //Detect change to process prop
   watch: {
     process: {
       handler() {
         this.editedProcess = { ...this.process }
       },
       deep: true
+    },
+    'editedProcess.target_type'(newType) {
+      if (newType === 'python' && !this.editedProcess.requirements && !this.process.id) {
+        this.editedProcess.requirements = 'python'
+      }
     }
   }
 }
